@@ -556,7 +556,13 @@ input::placeholder {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text);
+  margin: 0 0 0.35rem 0;
+}
+.result-card .result-level-ref {
+  font-size: 0.8rem;
+  color: var(--text-muted);
   margin: 0 0 1rem 0;
+  line-height: 1.4;
 }
 .result-card[data-level="Low"] .result-level-value { color: var(--level-low); }
 .result-card[data-level="Moderate"] .result-level-value { color: var(--level-mid); }
