@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IHCA 邏輯式回歸公式對照說明</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #f8f9fb;
+      --paper: #fff;
+      --border: #c5cdd6;
+      --text: #1c1c1c;
+      --text-muted: #525252;
+      --primary: #0b5cab;
+      --font: "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+      padding: 1rem;
+    }
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      background: var(--paper);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      border: 1px solid var(--border);
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem 0;
+      color: var(--text);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.5rem;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0 0 1.5rem 0;
+    }
+    h2 {
+      font-size: 1.15rem;
+      margin: 1.5rem 0 0.75rem 0;
+      color: var(--primary);
+    }
+    h3 {
+      font-size: 1rem;
+      margin: 1.25rem 0 0.5rem 0;
+      color: var(--text);
+    }
+    p { margin: 0.5rem 0; }
+    .math-block {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #f0f4f8;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+    .math-block .katex { font-size: 1.1em; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.75rem 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      text-align: left;
+    }
+    th {
+      background: #e8ecf1;
+      font-weight: 600;
+    }
+    tr:nth-child(even) { background: #fafbfc; }
+    .coef { font-family: "Consolas", monospace; font-weight: 600; }
+    .code-block {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: "Consolas", "Monaco", monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      margin: 0.75rem 0;
+    }
+    .code-block pre { margin: 0; white-space: pre-wrap; }
+    .note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 1.5rem 0 0 0;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.5rem 0;
+    }
+    ul { margin: 0.5rem 0; padding-left: 1.25rem; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>IHCA 院內心因性猝死風險預測：邏輯式回歸公式對照說明</h1>
+    <p class="subtitle">本頁為多變項邏輯式回歸模型之完整公式與係數對照，可供學位論文或技術報告引用。模型係數已固定，僅用於推論（inference），不進行再訓練。</p>
+
+    <h2>1. 模型型式</h2>
+    <p>多變項邏輯式回歸（multivariable logistic regression），連結函數為 logit。</p>
+
+    <hr>
+
+    <h2>2. Logit 線性預測式</h2>
+    <p>令 <strong>logit</strong> 為線性預測值（linear predictor），其定義為：</p>
+    <div class="math-block" data-math="\text{logit} = \beta_0 + \sum_{j=1}^{p} \beta_j \, x_j"></div>
+    <p>本模型之<strong>截距</strong>與<strong>迴歸係數</strong>如下表，代入上式即得 logit 之計算公式。</p>
+
+    <h3>2.1 截距（Intercept）</h3>
+    <table>
+      <thead>
+        <tr><th>參數</th><th>符號</th><th>數值</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>截距</td><td>β₀</td><td class="coef">8.282</td></tr>
+      </tbody>
+    </table>
+
+    <h3>2.2 自變項與係數</h3>
+    <table>
+      <thead>
+        <tr><th>序號</th><th>變項名稱（代號）</th><th>係數 βⱼ</th><th>說明（建議）</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Temp__01_1</td><td class="coef">−0.146</td><td>體溫（°C）</td></tr>
+        <tr><td>2</td><td>Sp_01_1</td><td class="coef">−0.012</td><td>收縮壓（mmHg）</td></tr>
+        <tr><td>3</td><td>Dp_01_1</td><td class="coef">+0.008</td><td>舒張壓（mmHg）</td></tr>
+        <tr><td>4</td><td>Spo2_01_1</td><td class="coef">−0.037</td><td>血氧飽和度（%）</td></tr>
+        <tr><td>5</td><td>Age_per_10_year</td><td class="coef">+0.112</td><td>年齡（每 10 歲為 1 單位）</td></tr>
+        <tr><td>6</td><td>Sex</td><td class="coef">+0.242</td><td>性別（編碼依研究定義，如 1=男、0=女）</td></tr>
+        <tr><td>7</td><td>pleuraleffusion</td><td class="coef">+0.645</td><td>肋膜積水（0/1）</td></tr>
+        <tr><td>8</td><td>MI</td><td class="coef">+0.292</td><td>心肌梗塞（0/1）</td></tr>
+        <tr><td>9</td><td>HF</td><td class="coef">+0.495</td><td>心衰竭（0/1）</td></tr>
+        <tr><td>10</td><td>Albumin</td><td class="coef">−0.506</td><td>白蛋白（g/dL）</td></tr>
+        <tr><td>11</td><td>GlucoseAC</td><td class="coef">−0.002</td><td>空腹血糖（mg/dL）</td></tr>
+        <tr><td>12</td><td>Hemoglobin</td><td class="coef">−0.220</td><td>血紅素（g/dL）</td></tr>
+        <tr><td>13</td><td>WBC</td><td class="coef">+0.095</td><td>白血球（×10³/μL）</td></tr>
+        <tr><td>14</td><td>e_GFR</td><td class="coef">+0.010</td><td>估算腎絲球過濾率（mL/min/1.73 m²）</td></tr>
+        <tr><td>15</td><td>Potassium</td><td class="coef">+0.365</td><td>鉀（mEq/L 或 mmol/L）</td></tr>
+      </tbody>
+    </table>
+
+    <h3>2.3 完整 Logit 計算式（代數形式）</h3>
+    <div class="math-block" data-math="\begin{aligned}
+\text{logit} &= 8.282 \\
+&\quad + (-0.146) \times \text{Temp\_\_01\_1} \\
+&\quad + (-0.012) \times \text{Sp\_01\_1} \\
+&\quad + (0.008) \times \text{Dp\_01\_1} \\
+&\quad + (-0.037) \times \text{Spo2\_01\_1} \\
+&\quad + (0.112) \times \text{Age\_per\_10\_year} \\
+&\quad + (0.242) \times \text{Sex} \\
+&\quad + (0.645) \times \text{pleuraleffusion} \\
+&\quad + (0.292) \times \text{MI} \\
+&\quad + (0.495) \times \text{HF} \\
+&\quad + (-0.506) \times \text{Albumin} \\
+&\quad + (-0.002) \times \text{GlucoseAC} \\
+&\quad + (-0.220) \times \text{Hemoglobin} \\
+&\quad + (0.095) \times \text{WBC} \\
+&\quad + (0.010) \times \text{e\_GFR} \\
+&\quad + (0.365) \times \text{Potassium}
+\end{aligned}"></div>
+
+    <hr>
+
+    <h2>3. 機率轉換（Probability transformation）</h2>
+    <p>事件機率 <em>P</em>（IHCA 發生之預測機率）由 logit 經標準邏輯函數（standard logistic function）轉換：</p>
+    <div class="math-block" data-math="P = \frac{1}{1 + e^{-\text{logit}}} = \frac{e^{\text{logit}}}{1 + e^{\text{logit}}}"></div>
+    <p>其中 <em>e</em> 為自然指數。P ∈ (0, 1)。</p>
+
+    <hr>
+
+    <h2>4. 風險分級規則（Risk stratification）</h2>
+    <p>依預測機率 <em>P</em> 將個案分為三級：</p>
+    <table>
+      <thead>
+        <tr><th>條件</th><th>風險等級（Risk level）</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>P &lt; 0.10</td><td>Low</td></tr>
+        <tr><td>0.10 ≤ P &lt; 0.30</td><td>Moderate</td></tr>
+        <tr><td>P ≥ 0.30</td><td>High</td></tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>5. 輸出格式（實作用）</h2>
+    <p>模型輸出可表示為：</p>
+    <div class="code-block">
+      <pre>{
+  "logit": "計算所得之 logit 數值",
+  "probability": "P（依上式由 logit 計算）",
+  "risk_level": "Low | Moderate | High"
+}</pre>
+    </div>
+
+    <hr>
+
+    <h2>6. 係數一覽（純數值，便於對照與複製）</h2>
+    <div class="code-block">
+      <pre>截距 (β₀)            =  8.282
+Temp__01_1           = -0.146
+Sp_01_1              = -0.012
+Dp_01_1              =  0.008
+Spo2_01_1            = -0.037
+Age_per_10_year      =  0.112
+Sex                  =  0.242
+pleuraleffusion      =  0.645
+MI                   =  0.292
+HF                   =  0.495
+Albumin              = -0.506
+GlucoseAC            = -0.002
+Hemoglobin           = -0.220
+WBC                  =  0.095
+e_GFR                =  0.010
+Potassium            =  0.365</pre>
+    </div>
+
+    <hr>
+
+    <h2>7. 引用與聲明建議</h2>
+    <ul>
+      <li>本模型為<strong>臨床決策輔助工具</strong>，非診斷依據；結果應結合臨床專業判斷使用。</li>
+      <li>若於論文中引用係數或公式，請依貴單位規範註明模型來源與訓練/驗證資料。</li>
+    </ul>
+
+    <p class="note">本頁產生自 IHCA 風險預測專案，係數與變項名稱與實作檔 riskCalc.js 一致。</p>
+  </div>
+
+  <script>
+    document.querySelectorAll('.math-block[data-math]').forEach(function (el) {
+      var tex = el.getAttribute('data-math');
+      el.removeAttribute('data-math');
+      try {
+        katex.render(tex, el, { displayMode: true, throwOnError: false });
+      } catch (e) {
+        el.textContent = tex;
+      }
+    });
+  </script>
+</body>
+</html>

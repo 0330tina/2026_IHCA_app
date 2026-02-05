@@ -34,14 +34,21 @@
   --font-sans: "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
   --breakpoint-md: 900px;
   --breakpoint-sm: 500px;
+  --breakpoint-xs: 360px;
   --content-max-width: 1200px;
   --note-max-height: 260px;
+  --touch-min: 44px;
 }
 
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -52,8 +59,12 @@ body {
   color: var(--text);
   background: var(--bg-page);
   min-height: 100vh;
+  min-height: -webkit-fill-available;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 /* ----- Header 醫療風格 ----- */
@@ -61,6 +72,7 @@ body {
   background: linear-gradient(180deg, var(--primary) 0%, var(--primary-hover) 100%);
   color: #fff;
   padding: 1rem 1.25rem;
+  padding-top: calc(1rem + env(safe-area-inset-top));
   box-shadow: var(--shadow);
 }
 .header h1 {
@@ -73,8 +85,13 @@ body {
   font-size: 0.8rem;
   opacity: 0.92;
 }
+@media (max-width: var(--breakpoint-sm)) {
+  .header { padding: 0.75rem 1rem; padding-top: calc(0.75rem + env(safe-area-inset-top)); }
+  .header h1 { font-size: 1.2rem; }
+  .subtitle { font-size: 0.75rem; }
+}
 
-/* ----- Main: 左輸入右輸出，窄螢幕上下 ----- */
+/* ----- Main: 左輸入右輸出，窄螢幕上下（手機單欄） ----- */
 .main {
   flex: 1;
   display: grid;
@@ -90,7 +107,11 @@ body {
 @media (max-width: var(--breakpoint-md)) {
   .main {
     grid-template-columns: 1fr;
+    padding: 0.75rem 1rem;
   }
+}
+@media (max-width: var(--breakpoint-xs)) {
+  .main { padding: 0.5rem 0.75rem; }
 }
 
 /* ----- Panels ----- */
@@ -130,6 +151,15 @@ body {
   margin: 0;
   width: 1rem;
   height: 1rem;
+  -webkit-tap-highlight-color: transparent;
+}
+@media (max-width: var(--breakpoint-sm)) {
+  .fieldset legend input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    min-width: 1.25rem;
+    min-height: 1.25rem;
+  }
 }
 
 /* 檢驗區塊：預設收合，勾選後展開 */
@@ -154,6 +184,8 @@ body {
 @media (max-width: var(--breakpoint-sm)) {
   .form-row {
     grid-template-columns: 1fr;
+    min-height: var(--touch-min);
+    margin-bottom: 0.6rem;
   }
   .form-row .field-unit,
   .form-row .error-msg { grid-column: 1; }
@@ -176,6 +208,23 @@ select {
   font-size: 0.95rem;
   font-family: inherit;
   max-width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+}
+@media (max-width: var(--breakpoint-sm)) {
+  input[type="text"],
+  input[type="number"],
+  select {
+    min-height: var(--touch-min);
+    padding: 0.5rem 0.6rem;
+    font-size: 16px;
+  }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23525252' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    padding-right: 2rem;
+  }
 }
 input:focus,
 select:focus {
@@ -229,6 +278,15 @@ input::placeholder {
   cursor: pointer;
   border: none;
   transition: background 0.15s, color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+@media (max-width: var(--breakpoint-sm)) {
+  .btn {
+    min-height: var(--touch-min);
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+  }
 }
 .btn-primary {
   background: var(--primary);
@@ -389,6 +447,7 @@ input::placeholder {
 /* ----- Footer ----- */
 .footer {
   padding: 0.5rem 1rem;
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
   font-size: 0.75rem;
   color: var(--text-muted);
   background: var(--bg-footer);
@@ -396,4 +455,19 @@ input::placeholder {
 }
 .footer p {
   margin: 0;
+}
+@media (max-width: var(--breakpoint-sm)) {
+  .footer { padding: 0.5rem 0.75rem; padding-bottom: calc(0.5rem + env(safe-area-inset-bottom)); }
+}
+
+/* ----- 手機：結果區與可複製區塊 ----- */
+@media (max-width: var(--breakpoint-sm)) {
+  .panel { padding: 0.75rem 1rem; }
+  .result-score-row { padding: 0.75rem; gap: 1rem; }
+  .result-value { font-size: 1.25rem; }
+  .note-text {
+    max-height: 200px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.8rem;
+  }
 }
