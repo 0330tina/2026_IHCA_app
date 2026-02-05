@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b5cab">
+  <meta name="format-detection" content="telephone=no">
+  <title>可用性評估問卷 | IHCA 風險預測平台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="questionnaire-page">
+  <header class="header header-result">
+    <div class="header-inner">
+      <h1>可用性評估問卷</h1>
+    </div>
+  </header>
+
+  <main class="questionnaire-main">
+    <p class="questionnaire-desc">
+      本問卷旨在評估本平台之可用性，請依據您實際操作經驗勾選。填答採匿名，僅供學術與系統改善使用。<br>
+      <strong>1 = 非常不同意　2 = 不同意　3 = 普通　4 = 同意　5 = 非常同意</strong>
+    </p>
+
+    <form id="usability-form" class="questionnaire-card">
+      <div class="q-item">
+        <label class="q-label">1. 本系統容易學習與操作。</label>
+        <div class="q-options" role="group" aria-label="題目1">
+          <label class="q-opt"><input type="radio" name="q1" value="1"> 1</label>
+          <label class="q-opt"><input type="radio" name="q1" value="2"> 2</label>
+          <label class="q-opt"><input type="radio" name="q1" value="3"> 3</label>
+          <label class="q-opt"><input type="radio" name="q1" value="4"> 4</label>
+          <label class="q-opt"><input type="radio" name="q1" value="5"> 5</label>
+        </div>
+      </div>
+      <div class="q-item">
+        <label class="q-label">2. 不需他人協助即可獨立完成風險評估流程。</label>
+        <div class="q-options" role="group" aria-label="題目2">
+          <label class="q-opt"><input type="radio" name="q2" value="1"> 1</label>
+          <label class="q-opt"><input type="radio" name="q2" value="2"> 2</label>
+          <label class="q-opt"><input type="radio" name="q2" value="3"> 3</label>
+          <label class="q-opt"><input type="radio" name="q2" value="4"> 4</label>
+          <label class="q-opt"><input type="radio" name="q2" value="5"> 5</label>
+        </div>
+      </div>
+      <div class="q-item">
+        <label class="q-label">3. 我能有效率地完成資料輸入並取得風險評估結果。</label>
+        <div class="q-options" role="group" aria-label="題目3">
+          <label class="q-opt"><input type="radio" name="q3" value="1"> 1</label>
+          <label class="q-opt"><input type="radio" name="q3" value="2"> 2</label>
+          <label class="q-opt"><input type="radio" name="q3" value="3"> 3</label>
+          <label class="q-opt"><input type="radio" name="q3" value="4"> 4</label>
+          <label class="q-opt"><input type="radio" name="q3" value="5"> 5</label>
+        </div>
+      </div>
+      <div class="q-item">
+        <label class="q-label">4. 介面資訊編排清楚，易於理解。</label>
+        <div class="q-options" role="group" aria-label="題目4">
+          <label class="q-opt"><input type="radio" name="q4" value="1"> 1</label>
+          <label class="q-opt"><input type="radio" name="q4" value="2"> 2</label>
+          <label class="q-opt"><input type="radio" name="q4" value="3"> 3</label>
+          <label class="q-opt"><input type="radio" name="q4" value="4"> 4</label>
+          <label class="q-opt"><input type="radio" name="q4" value="5"> 5</label>
+        </div>
+      </div>
+      <div class="q-item">
+        <label class="q-label">5. 風險評估結果的呈現方式易於解讀。</label>
+        <div class="q-options" role="group" aria-label="題目5">
+          <label class="q-opt"><input type="radio" name="q5" value="1"> 1</label>
+          <label class="q-opt"><input type="radio" name="q5" value="2"> 2</label>
+          <label class="q-opt"><input type="radio" name="q5" value="3"> 3</label>
+          <label class="q-opt"><input type="radio" name="q5" value="4"> 4</label>
+          <label class="q-opt"><input type="radio" name="q5" value="5"> 5</label>
+        </div>
+      </div>
+      <div class="q-item">
+        <label class="q-label">6. 整體而言，我認為本系統具有良好可用性，願意在臨床情境中使用。</label>
+        <div class="q-options" role="group" aria-label="題目6">
+          <label class="q-opt"><input type="radio" name="q6" value="1"> 1</label>
+          <label class="q-opt"><input type="radio" name="q6" value="2"> 2</label>
+          <label class="q-opt"><input type="radio" name="q6" value="3"> 3</label>
+          <label class="q-opt"><input type="radio" name="q6" value="4"> 4</label>
+          <label class="q-opt"><input type="radio" name="q6" value="5"> 5</label>
+        </div>
+      </div>
+      <div class="q-item q-item-open">
+        <label class="q-label" for="q7">7. 請簡述您對本平台介面、操作流程或功能之改進建議。（選填）</label>
+        <textarea id="q7" name="q7" class="q-textarea" rows="4" placeholder="請輸入您的建議…"></textarea>
+      </div>
+      <div class="questionnaire-actions">
+        <button type="submit" class="btn btn-primary">提交問卷</button>
+        <a href="result.html" class="btn btn-outline">返回結果頁</a>
+      </div>
+    </form>
+
+    <div id="questionnaire-thanks" class="questionnaire-thanks hidden">
+      <p class="thanks-title">感謝您的填答</p>
+      <p class="thanks-text">您的意見將作為系統改善與研究分析之用。</p>
+      <a href="index.html" class="btn btn-primary">回首頁</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var form = document.getElementById('usability-form');
+      var thanks = document.getElementById('questionnaire-thanks');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var q1to6 = [];
+        for (var i = 1; i <= 6; i++) {
+          var r = form.querySelector('input[name="q' + i + '"]:checked');
+          q1to6.push(r ? r.value : '');
+        }
+        var q7 = form.querySelector('#q7').value.trim();
+        try {
+          localStorage.setItem('ihca_usability', JSON.stringify({
+            q1: q1to6[0], q2: q1to6[1], q3: q1to6[2], q4: q1to6[3], q5: q1to6[4], q6: q1to6[5],
+            q7: q7,
+            at: new Date().toISOString()
+          }));
+        } catch (err) {}
+        form.classList.add('hidden');
+        thanks.classList.remove('hidden');
+      });
+    })();
+  </script>
+</body>
+</html>
