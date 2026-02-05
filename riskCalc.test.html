@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>IHCA 風險計算模組 - 驗證</title>
+</head>
+<body>
+  <h1>IHCA 邏輯式回歸風險計算模組 - 驗證</h1>
+  <pre id="output"></pre>
+  <script src="riskCalc.js"></script>
+  <script>
+    var calc = window.IHCARiskCalc;
+    var out = document.getElementById('output');
+
+    var sampleInput = {
+      Temp__01_1: 36.5,
+      Sp_01_1: 120,
+      Dp_01_1: 70,
+      Spo2_01_1: 98,
+      Age_per_10_year: 7,
+      Sex: 1,
+      pleuraleffusion: 0,
+      MI: 0,
+      HF: 0,
+      Albumin: 3.5,
+      GlucoseAC: 120,
+      Hemoglobin: 12,
+      WBC: 8,
+      e_GFR: 60,
+      Potassium: 4.0
+    };
+
+    var result = calc.calculate(sampleInput);
+    out.textContent = JSON.stringify(result, null, 2) + '\n\n' + calc.DISCLAIMER;
+  </script>
+</body>
+</html>

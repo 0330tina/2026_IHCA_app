@@ -1,0 +1,399 @@
+/* ===== IHCA Day-1 入院首日風險板 · 醫療風格 ===== */
+:root {
+  --bg-page: #e8ecf1;
+  --bg-panel: #fff;
+  --bg-fieldset: #f8f9fb;
+  --bg-result: #f0f4f8;
+  --bg-note: #f5f6f8;
+  --bg-footer: #dde1e6;
+  --bg-input-error: #fff5f5;
+  --bg-input-warn: #fffef5;
+  --border: #c5cdd6;
+  --text: #1c1c1c;
+  --text-muted: #525252;
+  --text-placeholder: #888;
+  --primary: #0b5cab;
+  --primary-hover: #094989;
+  --primary-focus-rgba: rgba(11, 92, 171, 0.2);
+  --btn-outline-hover: rgba(11, 92, 171, 0.08);
+  --secondary: #5c6b7a;
+  --secondary-hover: #4a5866;
+  --danger: #c00;
+  --success: #0a6e0a;
+  --warning: #b38600;
+  --level-low: #0a6e0a;
+  --level-low-bg: #d4edda;
+  --level-mid: #b38600;
+  --level-mid-text: #7d6600;
+  --level-mid-bg: #fff3cd;
+  --level-high: #c00;
+  --level-high-bg: #f8d7da;
+  --shadow: 0 1px 4px rgba(0,0,0,0.08);
+  --radius: 6px;
+  --radius-sm: 4px;
+  --font-sans: "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
+  --breakpoint-md: 900px;
+  --breakpoint-sm: 500px;
+  --content-max-width: 1200px;
+  --note-max-height: 260px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg-page);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ----- Header 醫療風格 ----- */
+.header {
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-hover) 100%);
+  color: #fff;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow);
+}
+.header h1 {
+  margin: 0 0 0.2rem 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.subtitle {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.92;
+}
+
+/* ----- Main: 左輸入右輸出，窄螢幕上下 ----- */
+.main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  width: 100%;
+  align-items: start;
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----- Panels ----- */
+.panel {
+  background: var(--bg-panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+}
+.panel h2 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid var(--primary);
+}
+
+/* ----- Form ----- */
+.fieldset {
+  margin: 0 0 1rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-fieldset);
+}
+.fieldset legend {
+  font-weight: 600;
+  color: var(--text);
+  padding: 0 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.fieldset legend input[type="checkbox"] {
+  margin: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* 檢驗區塊：預設收合，勾選後展開 */
+.lab-fieldset .lab-fields {
+  display: none;
+}
+.lab-fieldset.lab-visible .lab-fields {
+  display: block;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 100px 1fr auto auto;
+  gap: 0.4rem 0.6rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  min-height: 2rem;
+}
+.form-row:last-of-type {
+  margin-bottom: 0;
+}
+@media (max-width: var(--breakpoint-sm)) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .form-row .field-unit,
+  .form-row .error-msg { grid-column: 1; }
+}
+
+label {
+  font-weight: 500;
+  color: var(--text);
+}
+.required {
+  color: var(--danger);
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  max-width: 100%;
+}
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-focus-rgba);
+}
+input.warn-range {
+  border-color: var(--warning);
+  background: var(--bg-input-warn);
+}
+input.error,
+select.error {
+  border-color: var(--danger);
+  background: var(--bg-input-error);
+}
+input::placeholder {
+  color: var(--text-placeholder);
+}
+
+.field-unit {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.error-msg {
+  grid-column: 2 / -1;
+  font-size: 0.75rem;
+  color: var(--danger);
+  min-height: 1em;
+}
+@media (max-width: var(--breakpoint-sm)) {
+  .error-msg { grid-column: 1; }
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+/* ----- Buttons ----- */
+.btn {
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: inherit;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+.btn-secondary {
+  background: var(--secondary);
+  color: #fff;
+}
+.btn-secondary:hover {
+  background: var(--secondary-hover);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+.btn-outline:hover {
+  background: var(--btn-outline-hover);
+}
+
+/* ----- Result 區 ----- */
+.result-panel h3 {
+  margin: 0 0 0.4rem 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.result-placeholder {
+  color: var(--text-muted);
+  padding: 0.75rem 0;
+  font-size: 0.9rem;
+}
+.result-placeholder p {
+  margin: 0;
+}
+
+.result-content.hidden {
+  display: none;
+}
+.result-content:not(.hidden) {
+  display: block;
+}
+
+.result-score-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-result);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.result-label {
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+.result-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.result-unit {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* 風險等級：顏色 + 圖示 */
+.result-level-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.result-level {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+.result-level-icon {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.result-level.level-low,
+.result-level-icon.level-low { background: var(--level-low-bg); color: var(--level-low); }
+.result-level.level-mid,
+.result-level-icon.level-mid   { background: var(--level-mid-bg); color: var(--level-mid-text); }
+.result-level.level-high,
+.result-level-icon.level-high { background: var(--level-high-bg); color: var(--level-high); }
+
+.result-block {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+.result-block.hidden {
+  display: none;
+}
+
+.missing-block .missing-list,
+.warnings-block .warnings-list {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.warnings-list {
+  padding-left: 1.2rem;
+}
+
+.recommendation-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+.recommendation-list li {
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.copy-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+.copy-feedback {
+  font-size: 0.8rem;
+  color: var(--success);
+}
+
+.note-text {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: var(--bg-note);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: "Consolas", "Monaco", monospace;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: var(--note-max-height);
+  overflow-y: auto;
+}
+
+/* ----- Footer ----- */
+.footer {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--bg-footer);
+  text-align: center;
+}
+.footer p {
+  margin: 0;
+}
