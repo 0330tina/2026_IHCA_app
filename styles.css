@@ -509,3 +509,94 @@ input::placeholder {
     font-size: 0.8rem;
   }
 }
+
+/* ===== 第二畫面：風險評估結果頁（result.html）===== */
+.result-page .header-result .header-inner {
+  max-width: none;
+}
+.result-page .header-result h1 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.result-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.25rem 1rem;
+  max-width: 520px;
+  margin: 0 auto;
+  width: 100%;
+}
+.result-card {
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.result-card .result-prob-label,
+.result-card .result-level-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin: 0 0 0.25rem 0;
+}
+.result-card .result-prob-value {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 1rem 0;
+  letter-spacing: 0.02em;
+}
+.result-card .result-level-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 1rem 0;
+}
+.result-card[data-level="Low"] .result-level-value { color: var(--level-low); }
+.result-card[data-level="Moderate"] .result-level-value { color: var(--level-mid); }
+.result-card[data-level="High"] .result-level-value { color: var(--level-high); }
+.result-explanation {
+  margin: 0 0 1.25rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+}
+.result-explanation p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text);
+}
+.result-disclaimer {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+.result-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+}
+.result-actions .btn-back {
+  min-height: var(--touch-min);
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 280px;
+}
+@media (max-width: var(--breakpoint-sm)) {
+  .result-main { padding: 1rem 0.75rem; }
+  .result-card { padding: 1.25rem 1rem; }
+  .result-card .result-prob-value { font-size: 1.5rem; }
+}

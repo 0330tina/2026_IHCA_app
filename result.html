@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b5cab">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <title>風險評估結果 | IHCA 風險預測平台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="result-page">
+  <header class="header header-result">
+    <div class="header-inner">
+      <h1>風險評估結果</h1>
+    </div>
+  </header>
+
+  <main class="result-main">
+    <div class="result-card" id="result-card">
+      <p class="result-prob-label">預測 IHCA 風險機率</p>
+      <p class="result-prob-value" id="result-prob">—</p>
+
+      <p class="result-level-label">風險分級</p>
+      <p class="result-level-value" id="result-level">—</p>
+
+      <div class="result-explanation" id="result-explanation">
+        <p id="result-explanation-text">—</p>
+      </div>
+
+      <p class="result-disclaimer">
+        本結果為邏輯式回歸模型之預測輸出，僅供臨床決策輔助，不可取代醫療專業判斷。
+      </p>
+    </div>
+
+    <div class="result-actions">
+      <a href="index.html" class="btn btn-primary btn-back" id="btn-back">回前頁重新輸入</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var STORAGE_KEY = 'ihca_result';
+      var EXPLANATIONS = {
+        Low: '此結果顯示風險落於較低區段，建議依常規照護與觀察。',
+        Moderate: '此結果高於一般住院族群，建議提高臨床警覺並密切追蹤。',
+        High: '此結果顯示為高風險族群，與較高 IHCA 發生機率相關，建議優先評估並加強監測。'
+      };
+      var LEVEL_LABELS = {
+        Low: '低風險',
+        Moderate: '中度風險',
+        High: '高風險'
+      };
+
+      var probEl = document.getElementById('result-prob');
+      var levelEl = document.getElementById('result-level');
+      var explanationEl = document.getElementById('result-explanation-text');
+      var cardEl = document.getElementById('result-card');
+      var btnBack = document.getElementById('btn-back');
+
+      function showNoData() {
+        probEl.textContent = '—';
+        levelEl.textContent = '尚無評估結果';
+        explanationEl.textContent = '請於前頁輸入資料並執行計算後，再檢視本頁。';
+      }
+
+      function loadResult() {
+        var raw = sessionStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          showNoData();
+          return;
+        }
+        try {
+          var data = JSON.parse(raw);
+          var p = data.probability;
+          var level = data.risk_level;
+          if (typeof p !== 'number' || !LEVEL_LABELS[level]) {
+            showNoData();
+            return;
+          }
+          var pct = (p * 100).toFixed(1);
+          probEl.textContent = pct + ' %';
+          levelEl.textContent = LEVEL_LABELS[level];
+          explanationEl.textContent = EXPLANATIONS[level] || '';
+          cardEl.setAttribute('data-level', level);
+        } catch (e) {
+          showNoData();
+        }
+      }
+
+      btnBack.addEventListener('click', function () {
+        sessionStorage.removeItem(STORAGE_KEY);
+      });
+
+      loadResult();
+    })();
+  </script>
+</body>
+</html>

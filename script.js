@@ -1,6 +1,6 @@
 /**
  * IHCA Day-1 入院首日風險板
- * 純前端、可部署 GitHub Pages。演算法係數集中於 CONFIG，未來可替換為 logistic 係數。
+ * 純前端。演算法係數集中於 CONFIG，未來可替換為 logistic 係數。
  */
 (function () {
   'use strict';
@@ -457,6 +457,34 @@
     resultPlaceholder.classList.remove('hidden');
   }
 
+  /** 由表單組出邏輯式回歸模組所需輸入（缺項用預設），供導向結果頁使用 */
+  function buildRiskCalcInput() {
+    var age = getValue('age');
+    var def = {
+      Temp__01_1: 36.5, Sp_01_1: 120, Dp_01_1: 70, Spo2_01_1: 98, Age_per_10_year: 6.5,
+      Sex: 0, pleuraleffusion: 0, MI: 0, HF: 0, Albumin: 3.5, GlucoseAC: 100,
+      Hemoglobin: 12, WBC: 8, e_GFR: 60, Potassium: 4
+    };
+    var input = {
+      Temp__01_1: getValue('temp') != null ? getValue('temp') : def.Temp__01_1,
+      Sp_01_1: getValue('sbp') != null ? getValue('sbp') : def.Sp_01_1,
+      Dp_01_1: getValue('dbp') != null ? getValue('dbp') : def.Dp_01_1,
+      Spo2_01_1: getValue('spo2') != null ? getValue('spo2') : def.Spo2_01_1,
+      Age_per_10_year: age != null ? age / 10 : def.Age_per_10_year,
+      Sex: getValue('gender') === 'M' ? 1 : getValue('gender') === 'F' ? 0 : 0,
+      pleuraleffusion: def.pleuraleffusion,
+      MI: def.MI,
+      HF: def.HF,
+      Albumin: getValue('albumin') != null ? getValue('albumin') : def.Albumin,
+      GlucoseAC: getValue('glucose') != null ? getValue('glucose') : def.GlucoseAC,
+      Hemoglobin: getValue('hb') != null ? getValue('hb') : def.Hemoglobin,
+      WBC: getValue('wbc') != null ? getValue('wbc') : def.WBC,
+      e_GFR: def.e_GFR,
+      Potassium: def.Potassium
+    };
+    return input;
+  }
+
   function onSubmit(e) {
     e.preventDefault();
     clearAllErrors();
@@ -464,6 +492,18 @@
       var first = form.querySelector('.error');
       if (first) first.focus();
       return;
+    }
+    if (typeof IHCARiskCalc !== 'undefined') {
+      try {
+        var input = buildRiskCalcInput();
+        var result = IHCARiskCalc.calculate(input);
+        sessionStorage.setItem('ihca_result', JSON.stringify({
+          probability: result.probability,
+          risk_level: result.risk_level
+        }));
+        window.location.href = 'result.html';
+        return;
+      } catch (err) { }
     }
     var payload = collectDataForCalc();
     var result = computeRiskResult(payload);
