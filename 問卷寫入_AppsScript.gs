@@ -1,45 +1,99 @@
-/**
- * IHCA 可用性問卷寫入 Google 試算表
- *
- * 步驟：
- * 1. 若腳本是從試算表內建立（擴充功能→Apps Script），SPREADSHEET_ID 留空
- * 2. 若為獨立專案，填上試算表 ID（網址 /d/ 後面那串）
- * 3. 部署：部署 → 新增部署 → 網路應用程式
- *    執行身分：我 | 存取權：任何人
- * 4. 用瀏覽器打開部署網址完成授權
- */
+function doPost(e) {
+  try {
+    var spreadsheetId = '1c-tjSKk7SmY0ILJvqWVj1OEn71sSWRbjL1OIfhnAJcE';
+    var sheetName = '工作表1'; // ←改成你的分頁名稱，例如「工作表1」
 
-var SPREADSHEET_ID = '';  // 留空=用目前試算表；獨立專案請填 ID
+    var ss = SpreadsheetApp.openById(spreadsheetId);
+    var sheet = ss.getSheetByName(sheetName) || ss.getActiveSheet();
 
-function doGet() {
-  return ContentService.createTextOutput('問卷寫入已就緒，請在問卷頁提交。')
+    // 讀取前端送來的 JSON
+    var raw;
+    if (e && e.parameter && e.parameter.data) raw = e.parameter.data;
+    else if (e && e.postData && e.postData.contents) raw = e.postData.contents;
+    else return jsonResponse_({ success: false, error: '無法取得資料（沒有收到 data 或 body）' });
+
+    var data = JSON.parse(raw);
+
+    // 支援前端欄位：timestamp 或 at；身分 或 role
+    var inputTime = parseToDateOrText_(data.timestamp != null ? data.timestamp : data.at);
+    var identity = safeText_(data['身分'] != null ? data['身分'] : data.role);
+
+    var q1 = safeText_(data.q1);
+    var q2 = safeText_(data.q2);
+    var q3 = safeText_(data.q3);
+    var q4 = safeText_(data.q4);
+    var q5 = safeText_(data.q5);
+    var q6 = safeText_(data.q6);
+    var q7 = safeText_(data.q7);
+
+    // 寫入：時間、身分、Q1~Q7
+    var row = [inputTime, identity, q1, q2, q3, q4, q5, q6, q7];
+
+    var lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try {
+      sheet.appendRow(row);
+    } finally {
+      lock.releaseLock();
+    }
+
+    return jsonResponse_({ success: true, message: '已寫入：時間、身分、Q1~Q7' });
+
+  } catch (error) {
+    return jsonResponse_({ success: false, error: String(error) });
+  }
+}
+
+function doGet(e) {
+  return ContentService.createTextOutput('問卷 API 已就緒')
     .setMimeType(ContentService.MimeType.TEXT);
 }
 
-function doPost(e) {
-  try {
-    if (!e || !e.postData || !e.postData.contents) {
-      return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'no body' }))
-        .setMimeType(ContentService.MimeType.JSON);
-    }
-    var sheet = SPREADSHEET_ID
-      ? SpreadsheetApp.openById(SPREADSHEET_ID).getActiveSheet()
-      : SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['時間', '身分', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']);
-    }
-    var data = JSON.parse(e.postData.contents);
-    var row = [
-      new Date().toISOString(),  // 使用伺服器收到請求的當下時間
-      data.role || '',
-      data.q1 || '', data.q2 || '', data.q3 || '', data.q4 || '', data.q5 || '', data.q6 || '',
-      data.q7 || ''
-    ];
-    sheet.appendRow(row);
-    return ContentService.createTextOutput(JSON.stringify({ success: true }))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch (err) {
-    return ContentService.createTextOutput(JSON.stringify({ success: false, error: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
+function jsonResponse_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function safeText_(v) {
+  if (v === null || v === undefined) return '';
+  return String(v);
+}
+
+function parseToDateOrText_(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'number') {
+    if (v < 1e12) return new Date(v * 1000);
+    return new Date(v);
   }
+  if (typeof v === 'string') {
+    var s = v.trim();
+    if (!s) return '';
+    var normalized = s.replace(' ', 'T');
+    var d = new Date(normalized);
+    if (!isNaN(d.getTime())) return d;
+    return s;
+  }
+  return String(v);
+}
+
+/**
+ * ✅ 不用前端！直接按一下就寫入一筆測試資料到試算表
+ */
+function testAppend() {
+  var fake = {
+    timestamp: "2026-02-08 14:30:12",
+    "身分": "護理師",
+    q1: "1",
+    q2: "1",
+    q3: "1",
+    q4: "1",
+    q5: "1",
+    q6: "1",
+    q7: "1"
+  };
+
+  // 模擬 doPost 收到的 e
+  var e = { postData: { contents: JSON.stringify(fake) } };
+  var res = doPost(e);
+  Logger.log(res.getContent());
 }
