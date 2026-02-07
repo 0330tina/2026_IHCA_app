@@ -96,9 +96,7 @@
       <p class="thanks-title">感謝您的填答</p>
       <p class="thanks-text">您的意見將作為系統改善與研究分析之用。</p>
       <p id="thanks-google-msg" class="thanks-google-msg hidden">您的回覆已存至 Google 試算表。</p>
-      <p id="thanks-download-hint" class="thanks-download-hint hidden">可下載此筆回覆（CSV），再上傳至 Google 試算表彙整。</p>
       <div class="questionnaire-actions">
-        <a href="#" id="btn-download-csv" class="btn btn-outline thanks-download-btn hidden">下載回覆 (CSV)</a>
         <a href="index.html" class="btn btn-primary">回首頁</a>
       </div>
     </div>
@@ -106,33 +104,8 @@
 
   <script>
     (function () {
-      // 若要存檔到 Google 試算表，請在 Google 試算表建立 Apps Script 並部署為網路應用程式，把網址貼在下方（見 可用性問卷存檔到Google.md）
-      var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwE6b96s3wV5rAxhHWLbc_zgGT3DVBCQP0T6l7ZFBQ1pAfuZVa13P4X7R7deFGCh3mIFQ/exec';  // 例：'https://script.google.com/macros/s/xxxxxxxx/exec'
-      var lastPayload = null;
-
-      function escapeCsvCell(s) {
-        if (s == null) return '';
-        var t = String(s);
-        if (/[",\r\n]/.test(t)) return '"' + t.replace(/"/g, '""') + '"';
-        return t;
-      }
-
-      function downloadCsv(payload) {
-        var headers = ['時間', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7'];
-        var row = [
-          payload.at || '',
-          payload.q1 || '', payload.q2 || '', payload.q3 || '', payload.q4 || '', payload.q5 || '', payload.q6 || '',
-          escapeCsvCell(payload.q7)
-        ];
-        var csv = '\uFEFF' + headers.join(',') + '\n' + row.join(',');
-        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'IHCA_可用性問卷回覆_' + (payload.at || '').slice(0, 10) + '.csv';
-        a.click();
-        URL.revokeObjectURL(url);
-      }
+      // 存檔到 Google 試算表：在試算表建立 Apps Script 並部署為網路應用程式，網址貼在下方（見 可用性問卷存檔到Google.md）。資料於後台試算表查看即可。
+      var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwE6b96s3wV5rAxhHWLbc_zgGT3DVBCQP0T6l7ZFBQ1pAfuZVa13P4X7R7deFGCh3mIFQ/exec';
 
       var form = document.getElementById('usability-form');
       var thanks = document.getElementById('questionnaire-thanks');
@@ -149,7 +122,6 @@
           q7: q7,
           at: new Date().toISOString()
         };
-        lastPayload = payload;
         try {
           localStorage.setItem('ihca_usability', JSON.stringify(payload));
         } catch (err) {}
@@ -168,13 +140,6 @@
         } else {
           form.classList.add('hidden');
           thanks.classList.remove('hidden');
-          var hint = document.getElementById('thanks-download-hint');
-          var btn = document.getElementById('btn-download-csv');
-          if (hint) hint.classList.remove('hidden');
-          if (btn) {
-            btn.classList.remove('hidden');
-            btn.onclick = function (ev) { ev.preventDefault(); downloadCsv(lastPayload); };
-          }
         }
       });
     })();

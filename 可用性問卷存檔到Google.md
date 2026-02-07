@@ -71,8 +71,18 @@
 2. 刪除預設程式碼，貼上以下程式碼（會自動在空白試算表寫入第一列標題）：
 
 ```javascript
+// 用瀏覽器打開部署後的 URL 可觸發授權並確認已就緒（必做一次）
+function doGet() {
+  return ContentService.createTextOutput('問卷寫入已就緒，請在問卷頁提交。')
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
 function doPost(e) {
   try {
+    if (!e || !e.postData || !e.postData.contents) {
+      return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'no body' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(['時間', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']);
@@ -100,9 +110,24 @@ function doPost(e) {
    - **存取權**：**任何人**（否則 App 無法送資料）
 5. 按「部署」，複製產生的 **網路應用程式 URL**（長得像 `https://script.google.com/macros/s/xxxxx/exec`）。
 
-### 步驟 3：在問卷頁設定 URL
+### 步驟 3：第一次先「授權」腳本（重要，否則試算表收不到）
 
-在 `questionnaire.html` 裡已預留變數 `GOOGLE_SCRIPT_URL`。請把上面複製的 URL 貼進去（例如：`var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/你的ID/exec';`）。提交問卷時，App 會把資料 POST 到該網址，寫入試算表。（因瀏覽器限制，送出後無法顯示「已存到 Google」訊息，但資料會寫入；可到試算表檢查。）
+1. 用**瀏覽器**打開你複製的**網路應用程式 URL**（和問卷頁裡填的網址相同）。
+2. 若出現「Google 需要驗證此應用程式」或登入畫面，請用**試算表擁有者帳號**登入並按**允許**。
+3. 完成後畫面上應顯示：**問卷寫入已就緒，請在問卷頁提交。**
+4. 之後問卷提交的資料才會寫入試算表。若從未用瀏覽器打開過該 URL，外部送出的 POST 可能無法通過驗證，試算表就不會收到。
+
+### 步驟 4：在問卷頁設定 URL
+
+在 `questionnaire.html` 裡已預留變數 `GOOGLE_SCRIPT_URL`。請把上面複製的 URL 貼進去。提交問卷時，App 會把資料 POST 到該網址，寫入試算表。（因瀏覽器限制，送出後無法顯示「已存到 Google」訊息，但資料會寫入；可到試算表檢查。）
+
+### 試算表沒收到時請檢查
+
+- **先做步驟 3**：用瀏覽器打開 `GOOGLE_SCRIPT_URL` 一次，完成授權並看到「問卷寫入已就緒」。
+- **部署設定**：部署時「存取權」必須選 **任何人**；若選「僅自己」，從網頁送出的請求會被拒絕。
+- **程式碼已更新時**：改過 Apps Script 後要**重新部署**（部署 → 管理部署 → 編輯 → 版本：新版本 → 部署），否則仍跑舊版。
+- **查看錯誤**：在 Apps Script 編輯器左側 **執行作業** 可看每次觸發是否成功或有錯誤訊息。
+- **仍無法使用時**：改用「下載回覆 (CSV)」，再在 Google 試算表用 **檔案 → 匯入 → 上傳** 匯入 CSV。
 
 ### 注意
 
