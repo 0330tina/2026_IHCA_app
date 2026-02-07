@@ -151,6 +151,68 @@ function doPost(e) {
 }
 ```
 
+**寫法 C：依範本改（指定試算表 ID，並支援表單格式與 JSON body）**
+
+若你習慣範本寫法（註解、錯誤訊息中文、兩種資料格式），可貼下面這段。**請將 `YOUR_SPREADSHEET_ID` 替換成你的試算表 ID**（試算表網址中 `/d/` 後面那串）。
+
+```javascript
+// 用於測試：用瀏覽器打開部署網址可觸發
+function doGet() {
+  return ContentService.createTextOutput('問卷表單 API 已就緒，請在問卷頁提交。')
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
+function doPost(e) {
+  try {
+    // ▲ 重要：將下面的試算表 ID 替換成您的實際試算表 ID（網址 /d/ 後面那串）
+    var spreadsheetId = 'YOUR_SPREADSHEET_ID';
+    var sheet = SpreadsheetApp.openById(spreadsheetId).getActiveSheet();
+
+    // ▲ 關鍵：處理不同資料格式（表單格式或 JSON body，您的問卷目前用 JSON body）
+    var jsonData = null;
+    if (e.parameter && e.parameter.data) {
+      jsonData = e.parameter.data; // 表單格式：data=JSON 字串
+    } else if (e.postData && e.postData.contents) {
+      jsonData = e.postData.contents; // 問卷送出的格式：POST body 為 JSON
+    }
+    if (!jsonData) {
+      throw new Error('無法取得資料。請確認表單已正確提交。');
+    }
+
+    var data = JSON.parse(jsonData);
+
+    // 第一列為標題（若試算表為空）
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['時間', '身分', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']);
+    }
+
+    // 準備寫入的資料（對應 questionnaire.html 送出的欄位）
+    var timestamp = data.at || new Date().toISOString();
+    var role = data.role || '';
+    var q1 = data.q1 || '';
+    var q2 = data.q2 || '';
+    var q3 = data.q3 || '';
+    var q4 = data.q4 || '';
+    var q5 = data.q5 || '';
+    var q6 = data.q6 || '';
+    var q7 = data.q7 || '';
+
+    // 寫入一列到試算表
+    sheet.appendRow([timestamp, role, q1, q2, q3, q4, q5, q6, q7]);
+
+    return ContentService.createTextOutput(JSON.stringify({
+      success: true,
+      message: '資料已成功寫入試算表'
+    })).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({
+      success: false,
+      error: err.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+```
+
 **若你已部署過舊版（沒有「身分」欄）**：請把上述程式碼整段替換後**重新部署**，新回覆才會帶身分。試算表若已有舊資料，可手動在第二欄插入一欄、標題填「身分」，新筆資料即會寫入該欄。
 
 3. 儲存專案（可命名為「問卷寫入」）。
@@ -172,6 +234,8 @@ function doPost(e) {
 在 `questionnaire.html` 裡已預留變數 `GOOGLE_SCRIPT_URL`。請把上面複製的 URL 貼進去。提交問卷時，App 會把資料 POST 到該網址，寫入試算表。（因瀏覽器限制，送出後無法顯示「已存到 Google」訊息，但資料會寫入；可到試算表檢查。）
 
 ### 試算表沒收到／還是看不到有寫進的資料時請檢查
+
+**先用「問卷寫入測試」頁面逐步測：** 打開專案裡的 **`問卷寫入測試.html`**，貼上你的網路應用程式網址，依畫面依序按「1. 用瀏覽器打開網址（授權）」→「2. 送出一筆測試資料」→ 再去看試算表有沒有多一列。可快速判斷是網址／授權問題還是試算表 ID 沒填。
 
 1. **看對試算表與分頁**  
    資料會寫入「**綁定 Apps Script 的那個試算表**」：就是從該試算表選單 **擴充功能** → **Apps Script** 打開的那個專案所屬的試算表。請打開**同一個試算表檔案**，並查看**第一個工作表分頁**（資料會寫入 `getActiveSheet()`，通常是最左邊那個分頁）。

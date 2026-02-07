@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>問卷寫入 Google 試算表 — 測試</title>
+  <style>
+    body { font-family: "Microsoft JhengHei", sans-serif; max-width: 560px; margin: 2rem auto; padding: 0 1rem; }
+    h1 { font-size: 1.25rem; color: #333; }
+    label { display: block; margin-top: 1rem; font-weight: 600; color: #555; }
+    input[type="url"] { width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    .btn { display: inline-block; margin-top: 1rem; margin-right: 0.5rem; padding: 0.6rem 1rem; background: #0d9488; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+    .btn:hover { background: #0f766e; }
+    .btn2 { background: #5c6b7a; }
+    .btn2:hover { background: #4a5866; }
+    .msg { margin-top: 1rem; padding: 0.75rem; border-radius: 6px; font-size: 0.9rem; }
+    .msg.ok { background: #d4edda; color: #155724; }
+    .msg.err { background: #f8d7da; color: #721c24; }
+    .msg.info { background: #e7f3ff; color: #004085; }
+    ol { margin: 1rem 0; padding-left: 1.5rem; line-height: 1.8; color: #444; }
+    ol strong { color: #000; }
+  </style>
+</head>
+<body>
+  <h1>問卷寫入 Google 試算表 — 逐步測試</h1>
+  <p>請依序操作，找出問題在哪一步。</p>
+
+  <label for="url">你的「網路應用程式」網址（結尾要是 /exec）：</label>
+  <input type="url" id="url" placeholder="https://script.google.com/macros/s/xxxxx/exec" value="">
+
+  <div style="margin-top: 1rem;">
+    <button type="button" class="btn" id="btn-open">1. 用瀏覽器打開網址（授權）</button><br>
+    <button type="button" class="btn btn2" id="btn-send">2. 送出一筆測試資料到試算表</button>
+  </div>
+
+  <div id="msg" class="msg info" style="display: none;"></div>
+
+  <h2 style="font-size: 1rem; margin-top: 2rem;">檢查清單</h2>
+  <ol>
+    <li><strong>步驟 1</strong>：按「用瀏覽器打開網址」。若出現授權畫面，登入 Google 並按「允許」，直到看到「問卷寫入已就緒」。</li>
+    <li><strong>步驟 2</strong>：按「送出一筆測試資料」。若成功，下方會顯示綠字。</li>
+    <li><strong>步驟 3</strong>：打開你要收資料的 Google 試算表，看<strong>第一個工作表</strong>，最後一列是否多了一筆「測試…」的資料。</li>
+    <li>若步驟 1 打不開或沒看到「問卷寫入已就緒」→ 網址錯或部署有問題。</li>
+    <li>若步驟 2 顯示錯誤 → 看錯誤訊息；若沒錯誤但步驟 3 試算表沒有新列 → 檢查 Apps Script 是否用了<strong>寫法 B</strong> 且 <strong>試算表 ID 有填對</strong>。</li>
+  </ol>
+
+  <script>
+    (function () {
+      // 若同目錄有 questionnaire.html 且曾設定過，可從這裡讀不到，所以預設空白讓使用者貼上
+      var input = document.getElementById('url');
+      var msgEl = document.getElementById('msg');
+      function showMsg(text, type) {
+        msgEl.textContent = text;
+        msgEl.className = 'msg ' + (type || 'info');
+        msgEl.style.display = 'block';
+      }
+
+      document.getElementById('btn-open').onclick = function () {
+        var url = input.value.trim();
+        if (!url) {
+          showMsg('請先貼上「網路應用程式」網址。', 'err');
+          return;
+        }
+        if (url.indexOf('/exec') === -1) {
+          showMsg('網址結尾應為 /exec（正式部署），不是 /dev。', 'err');
+          return;
+        }
+        window.open(url, '_blank');
+        showMsg('已開新視窗。請在該視窗完成授權，看到「問卷寫入已就緒」後再按步驟 2。', 'ok');
+      };
+
+      document.getElementById('btn-send').onclick = function () {
+        var url = input.value.trim();
+        if (!url) {
+          showMsg('請先貼上網址。', 'err');
+          return;
+        }
+        var payload = {
+          at: new Date().toISOString(),
+          role: '測試身分',
+          q1: '4', q2: '4', q3: '4', q4: '4', q5: '4', q6: '4',
+          q7: '此為測試寫入，可刪除這列。'
+        };
+        showMsg('正在送出測試資料…', 'info');
+        fetch(url, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).then(function () {
+          showMsg('已送出。請打開 Google 試算表，看第一個工作表是否多了一列（時間、測試身分、4,4,4,4,4,4, 建議文字）。若沒有，請檢查 Apps Script 是否已填寫試算表 ID（寫法 B）並重新部署。', 'ok');
+        }).catch(function (err) {
+          showMsg('送出失敗：' + (err && err.message ? err.message : String(err)), 'err');
+        });
+      };
+    })();
+  </script>
+</body>
+</html>
