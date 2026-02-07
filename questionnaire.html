@@ -114,7 +114,7 @@
   <script>
     (function () {
       // 存檔到 Google 試算表：在試算表建立 Apps Script 並部署為網路應用程式，網址貼在下方（見 可用性問卷存檔到Google.md）。資料於後台試算表查看即可。
-      var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOy1NUQyCbTS3505ejVaztiSAnm91XSzcEQZLfqPSh2ePnrQe7VQ7b9EWVDe-Bej-WLg/exec';
+      var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUwUOqTfS0TOtWzJQljmjMju_g1PpJNGE5-84UB21bD8sfaI0dYVpGYlhFUD6aYwWavQ/exec';
 
       var form = document.getElementById('usability-form');
       var thanks = document.getElementById('questionnaire-thanks');
@@ -148,7 +148,7 @@
           fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify(payload)
           }).catch(function (err) {
             if (typeof console !== 'undefined' && console.error) console.error('[問卷] 送出失敗', err);

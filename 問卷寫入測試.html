@@ -85,7 +85,7 @@
         fetch(url, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain' },
           body: JSON.stringify(payload)
         }).then(function () {
           showMsg('已送出。請打開 Google 試算表，看第一個工作表是否多了一列（時間、測試身分、4,4,4,4,4,4, 建議文字）。若沒有，請檢查 Apps Script 是否已填寫試算表 ID（寫法 B）並重新部署。', 'ok');
