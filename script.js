@@ -555,8 +555,10 @@
     displayNote.textContent = noteText;
     var resultPanel = document.getElementById('result-panel');
     if (resultPanel) {
-      resultPanel.style.display = 'block';
-      resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      resultPanel.classList.add('is-visible');
+      setTimeout(function () {
+        resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
     }
   }
 
@@ -564,7 +566,7 @@
     resultContent.classList.add('hidden');
     resultPlaceholder.classList.remove('hidden');
     var resultPanel = document.getElementById('result-panel');
-    if (resultPanel) resultPanel.style.display = 'none';
+    if (resultPanel) resultPanel.classList.remove('is-visible');
   }
 
   /** 由表單組出邏輯式回歸模組所需輸入（缺項用預設），供導向結果頁使用 */

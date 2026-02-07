@@ -210,11 +210,8 @@ body {
   }
 }
 
-/* 檢驗區塊：預設收合，勾選後展開 */
+/* 檢驗區塊：一律顯示 */
 .lab-fieldset .lab-fields {
-  display: none;
-}
-.lab-fieldset.lab-visible .lab-fields {
   display: block;
 }
 
@@ -387,6 +384,10 @@ input::placeholder {
   margin-top: 1.5rem;
   padding-top: 1.25rem;
   border-top: 2px solid var(--primary);
+  display: none;
+}
+.result-panel-inline.is-visible {
+  display: block;
 }
 .result-panel-inline .panel-result-title {
   margin: 0 0 0.75rem 0;

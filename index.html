@@ -136,10 +136,7 @@
         </fieldset>
 
         <fieldset class="fieldset lab-fieldset" id="lab-fieldset">
-          <legend>
-            <input type="checkbox" id="toggle-labs" name="toggleLabs" aria-label="顯示檢驗欄位">
-            <span>Day-1 檢驗（可開關顯示）</span>
-          </legend>
+          <legend>Day-1 檢驗</legend>
           <div class="lab-fields" id="lab-fields">
             <div class="form-row">
               <label for="wbc">WBC</label>
@@ -209,7 +206,7 @@
       </form>
 
       <!-- 結果區：按「計算」後顯示於此 -->
-      <div id="result-panel" class="result-panel-inline" aria-live="polite" style="display: none;">
+      <div id="result-panel" class="result-panel-inline" aria-live="polite">
         <h2 class="panel-result-title">風險評估結果</h2>
         <div id="result-placeholder" class="result-placeholder"></div>
         <div id="result-content" class="result-content hidden">
