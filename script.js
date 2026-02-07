@@ -481,9 +481,47 @@
     return lines.join('\n');
   }
 
-  function showResult(payload, score, level, noteText) {
+  function riskLevelToDisplay(riskLevel) {
+    if (riskLevel === 'Low') return { id: 'low', label: '低風險', class: 'level-low' };
+    if (riskLevel === 'Moderate') return { id: 'mid', label: '中度風險', class: 'level-mid' };
+    return { id: 'high', label: '高風險', class: 'level-high' };
+  }
+
+  function buildNoteTextForRiskCalc(payload, result) {
+    var data = payload.data;
+    var pct = (result.probability * 100).toFixed(1);
+    var level = riskLevelToDisplay(result.risk_level);
+    var lines = [];
+    lines.push('【IHCA Day-1 入院首日風險評估】');
+    lines.push('基本：年齡 ' + getDisplayValue('age', data.age) + '、性別 ' + getDisplayValue('gender', data.gender) + '、身高 ' + getDisplayValue('height', data.height) + '、體重 ' + getDisplayValue('weight', data.weight));
+    lines.push('Day-1 生命徵象：HR ' + getDisplayValue('hr', data.hr) + '、SBP ' + getDisplayValue('sbp', data.sbp) + '、DBP ' + getDisplayValue('dbp', data.dbp) + '、RR ' + getDisplayValue('rr', data.rr) + '、SpO2 ' + getDisplayValue('spo2', data.spo2) + '、Temp ' + getDisplayValue('temp', data.temp));
+    lines.push('病史：肋膜積水 ' + getDisplayValue('pleuraleffusion', data.pleuraleffusion) + '、MI ' + getDisplayValue('MI', data.MI) + '、HF ' + getDisplayValue('HF', data.HF));
+    lines.push('Day-1 檢驗：WBC ' + getDisplayValue('wbc', data.wbc) + '、Hb ' + getDisplayValue('hb', data.hb) + '、…、e_GFR ' + getDisplayValue('e_GFR', data.e_GFR) + '、鉀 ' + getDisplayValue('potassium', data.potassium));
+    if (payload.missing.length) lines.push('缺少欄位：' + payload.missing.join('、'));
+    if (payload.rangeWarnings.length) lines.push('超出合理範圍（已納入計算）：' + payload.rangeWarnings.join('；'));
+    lines.push('');
+    lines.push('預測機率：' + pct + ' %');
+    lines.push('風險等級：' + level.label);
+    lines.push('建議處置：');
+    CONFIG.RECOMMENDATIONS[level.id].forEach(function (s) { lines.push('・' + s); });
+    lines.push('');
+    lines.push('（本紀錄由 IHCA Day-1 風險板產生，僅供病歷參考）');
+    return lines.join('\n');
+  }
+
+  function showResult(payload, score, level, noteText, opts) {
+    if (!resultPlaceholder || !resultContent) return;
     resultPlaceholder.classList.add('hidden');
     resultContent.classList.remove('hidden');
+    var scoreLabel = document.getElementById('display-score-label');
+    var scoreUnit = document.getElementById('display-score-unit');
+    if (opts && opts.useProbability && scoreLabel && scoreUnit) {
+      scoreLabel.textContent = '預測機率';
+      scoreUnit.textContent = '';
+    } else if (scoreLabel && scoreUnit) {
+      scoreLabel.textContent = '風險分數';
+      scoreUnit.textContent = '分';
+    }
     displayScore.textContent = score;
     displayLevel.textContent = level.label;
     displayLevel.className = 'result-level ' + level.class;
@@ -563,27 +601,34 @@
   function onSubmit(e) {
     e.preventDefault();
     clearAllErrors();
+    if (!form) return;
     if (!validateForm()) {
       var first = form.querySelector('.error');
-      if (first) first.focus();
+      if (first) {
+        first.focus();
+        first.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
       return;
     }
-    if (typeof IHCARiskCalc !== 'undefined') {
-      try {
+    try {
+      if (typeof IHCARiskCalc !== 'undefined') {
         var input = buildRiskCalcInput();
         var result = IHCARiskCalc.calculate(input);
-        sessionStorage.setItem('ihca_result', JSON.stringify({
-          probability: result.probability,
-          risk_level: result.risk_level
-        }));
-        window.location.href = 'result.html';
+        var payload = collectDataForCalc();
+        var pctStr = (result.probability * 100).toFixed(1) + ' %';
+        var level = riskLevelToDisplay(result.risk_level);
+        var noteText = buildNoteTextForRiskCalc(payload, result);
+        showResult(payload, pctStr, level, noteText, { useProbability: true });
         return;
-      } catch (err) { }
+      }
+      var payload = collectDataForCalc();
+      var result = computeRiskResult(payload);
+      var noteText = buildNoteText(payload.data, result.score, result.level, payload.missing, payload.rangeWarnings);
+      showResult(payload, result.score, result.level, noteText);
+    } catch (err) {
+      if (typeof console !== 'undefined' && console.error) console.error(err);
+      alert('計算時發生錯誤，請確認必填欄位（年齡）已填寫，或稍後再試。');
     }
-    var payload = collectDataForCalc();
-    var result = computeRiskResult(payload);
-    var noteText = buildNoteText(payload.data, result.score, result.level, payload.missing, payload.rangeWarnings);
-    showResult(payload, result.score, result.level, noteText);
   }
 
   function onCopy() {
