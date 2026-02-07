@@ -15,7 +15,10 @@
     <div class="header-inner">
       <div class="header-title-wrap">
         <h1>IHCA Day-1 入院首日風險板</h1>
-        <a href="formula_reference.html" class="header-formula-link" target="_blank" rel="noopener" title="邏輯式回歸完整公式對照（供教授／審查參考）">公式對照</a>
+        <div class="header-links">
+          <a href="whiteboard.html" class="header-formula-link" target="_blank" rel="noopener" title="電子白板示範（三種風險）">電子白板</a>
+          <a href="formula_reference.html" class="header-formula-link" target="_blank" rel="noopener" title="邏輯式回歸完整公式對照（供教授／審查參考）">公式對照</a>
+        </div>
       </div>
       <p class="subtitle">依入院首日生命徵象與檢驗結果評估院內心跳停止風險</p>
     </div>
@@ -63,33 +66,30 @@
 
         <fieldset class="fieldset">
           <legend>病史（供風險模型，選填）</legend>
-          <div class="form-row">
-            <label for="pleuraleffusion">肋膜積水</label>
-            <select id="pleuraleffusion" name="pleuraleffusion">
-              <option value="">— 請選擇 —</option>
-              <option value="0">否</option>
-              <option value="1">是</option>
-            </select>
+          <div class="form-row form-row-radio">
+            <label>肋膜積水</label>
+            <div class="radio-group" role="group" aria-label="肋膜積水">
+              <label class="radio-opt"><input type="radio" name="pleuraleffusion" value="0"> 否</label>
+              <label class="radio-opt"><input type="radio" name="pleuraleffusion" value="1"> 是</label>
+            </div>
             <span class="field-unit">—</span>
             <span class="error-msg" id="err-pleuraleffusion"></span>
           </div>
-          <div class="form-row">
-            <label for="MI">心肌梗塞 (MI)</label>
-            <select id="MI" name="MI">
-              <option value="">— 請選擇 —</option>
-              <option value="0">否</option>
-              <option value="1">是</option>
-            </select>
+          <div class="form-row form-row-radio">
+            <label>心肌梗塞 (MI)</label>
+            <div class="radio-group" role="group" aria-label="心肌梗塞">
+              <label class="radio-opt"><input type="radio" name="MI" value="0"> 否</label>
+              <label class="radio-opt"><input type="radio" name="MI" value="1"> 是</label>
+            </div>
             <span class="field-unit">—</span>
             <span class="error-msg" id="err-m-i"></span>
           </div>
-          <div class="form-row">
-            <label for="HF">心衰竭 (HF)</label>
-            <select id="HF" name="HF">
-              <option value="">— 請選擇 —</option>
-              <option value="0">否</option>
-              <option value="1">是</option>
-            </select>
+          <div class="form-row form-row-radio">
+            <label>心衰竭 (HF)</label>
+            <div class="radio-group" role="group" aria-label="心衰竭">
+              <label class="radio-opt"><input type="radio" name="HF" value="0"> 否</label>
+              <label class="radio-opt"><input type="radio" name="HF" value="1"> 是</label>
+            </div>
             <span class="field-unit">—</span>
             <span class="error-msg" id="err-h-f"></span>
           </div>
@@ -201,7 +201,10 @@
         <div class="form-actions">
           <button type="submit" id="btn-calc" class="btn btn-primary">計算</button>
           <button type="button" id="btn-reset" class="btn btn-secondary">Reset</button>
-          <button type="button" id="btn-demo" class="btn btn-outline">Demo Data</button>
+          <span class="demo-label">Demo：</span>
+          <button type="button" id="btn-demo-low" class="btn btn-outline">低風險</button>
+          <button type="button" id="btn-demo-mid" class="btn btn-outline">中度風險</button>
+          <button type="button" id="btn-demo-high" class="btn btn-outline">高風險</button>
         </div>
       </form>
     </section>

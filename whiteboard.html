@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>IHCA Day-1 風險板 | 電子白板</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .whiteboard-page { background: #0f172a; min-height: 100vh; color: #e2e8f0; }
+    .whiteboard-header {
+      background: linear-gradient(180deg, #0d9488 0%, #0f766e 100%);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      text-align: center;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .whiteboard-header small { display: block; font-size: 0.65em; font-weight: 400; opacity: 0.95; margin-top: 0.2rem; }
+    .whiteboard-main {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding: 1rem;
+      max-width: 1600px;
+      margin: 0 auto;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) {
+      .whiteboard-main { grid-template-columns: 1fr; }
+    }
+    .whiteboard-card {
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 200px;
+      border: 3px solid transparent;
+    }
+    .whiteboard-card.level-low   { background: #064e3b; border-color: #0d9488; color: #99f6e4; }
+    .whiteboard-card.level-mid   { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
+    .whiteboard-card.level-high  { background: #7f1d1d; border-color: #ef4444; color: #fecaca; }
+    .whiteboard-card-title {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+    .whiteboard-card-prob {
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 800;
+      margin: 0.25rem 0;
+      letter-spacing: 0.02em;
+    }
+    .whiteboard-card-level {
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    .whiteboard-card-demo {
+      font-size: 0.8rem;
+      opacity: 0.9;
+      margin-top: 0.75rem;
+      line-height: 1.4;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .whiteboard-footer {
+      text-align: center;
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .whiteboard-link { color: #38bdf8; text-decoration: none; margin-left: 0.5rem; }
+    .whiteboard-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body class="whiteboard-page">
+  <header class="whiteboard-header">
+    IHCA Day-1 入院首日風險板
+    <small>電子白板示範 — 三種風險等級</small>
+  </header>
+
+  <main class="whiteboard-main">
+    <div id="card-low" class="whiteboard-card level-low">
+      <div class="whiteboard-card-title">低風險</div>
+      <div class="whiteboard-card-prob" id="prob-low">—</div>
+      <div class="whiteboard-card-level" id="level-low">—</div>
+      <div class="whiteboard-card-demo" id="demo-low">—</div>
+    </div>
+    <div id="card-mid" class="whiteboard-card level-mid">
+      <div class="whiteboard-card-title">中度風險</div>
+      <div class="whiteboard-card-prob" id="prob-mid">—</div>
+      <div class="whiteboard-card-level" id="level-mid">—</div>
+      <div class="whiteboard-card-demo" id="demo-mid">—</div>
+    </div>
+    <div id="card-high" class="whiteboard-card level-high">
+      <div class="whiteboard-card-title">高風險</div>
+      <div class="whiteboard-card-prob" id="prob-high">—</div>
+      <div class="whiteboard-card-level" id="level-high">—</div>
+      <div class="whiteboard-card-demo" id="demo-high">—</div>
+    </div>
+  </main>
+
+  <footer class="whiteboard-footer">
+    本畫面為邏輯式回歸模型之預測示範，僅供臨床決策輔助參考。
+    <a href="index.html" class="whiteboard-link">回主頁輸入</a>
+  </footer>
+
+  <script src="riskCalc.js"></script>
+  <script>
+    (function () {
+      var DEMO_LOW = {
+        age: 42, gender: 'M', height: 172, weight: 68, hr: 72, sbp: 118, dbp: 74, rr: 16, spo2: 98, temp: 36.5,
+        wbc: 7.2, hb: 14, platelet: 220, creatinine: 0.9, bun: 12, albumin: 4.2, glucose: 92,
+        pleuraleffusion: '0', MI: '0', HF: '0', e_GFR: 95, potassium: 4.0
+      };
+      var DEMO_MID = {
+        age: 68, gender: 'F', height: 158, weight: 62, hr: 96, sbp: 102, dbp: 64, rr: 20, spo2: 94, temp: 37.2,
+        wbc: 11, hb: 10.2, platelet: 152, creatinine: 1.6, bun: 26, albumin: 3.1, glucose: 128,
+        pleuraleffusion: '0', MI: '0', HF: '1', e_GFR: 52, potassium: 4.3
+      };
+      var DEMO_HIGH = {
+        age: 78, gender: 'M', height: 168, weight: 72, hr: 105, sbp: 88, dbp: 55, rr: 22, spo2: 91, temp: 37.8,
+        wbc: 14.2, hb: 9.5, platelet: 85, creatinine: 2.4, bun: 38, albumin: 2.8, glucose: 165,
+        pleuraleffusion: '0', MI: '0', HF: '1', e_GFR: 45, potassium: 4.2
+      };
+
+      function buildInput(demo) {
+        var p = demo.pleuraleffusion, mi = demo.MI, hf = demo.HF;
+        return {
+          Temp__01_1: demo.temp,
+          Sp_01_1: demo.sbp,
+          Dp_01_1: demo.dbp,
+          Spo2_01_1: demo.spo2,
+          Age_per_10_year: demo.age / 10,
+          Sex: demo.gender === 'M' ? 1 : 0,
+          pleuraleffusion: (p !== undefined && p !== '') ? Number(p) : 0,
+          MI: (mi !== undefined && mi !== '') ? Number(mi) : 0,
+          HF: (hf !== undefined && hf !== '') ? Number(hf) : 0,
+          Albumin: demo.albumin,
+          GlucoseAC: demo.glucose,
+          Hemoglobin: demo.hb,
+          WBC: demo.wbc,
+          e_GFR: demo.e_GFR,
+          Potassium: demo.potassium
+        };
+      }
+
+      function shortLine(demo) {
+        return demo.age + '歲' + (demo.gender === 'M' ? '男' : '女') + ' · SBP ' + demo.sbp + ' SpO₂ ' + demo.spo2 + ' · Hb ' + demo.hb + ' · e_GFR ' + demo.e_GFR;
+      }
+
+      function render(id, demo, levelClass) {
+        if (typeof IHCARiskCalc === 'undefined') return;
+        var input = buildInput(demo);
+        var result = IHCARiskCalc.calculate(input);
+        var pct = (result.probability * 100).toFixed(1);
+        var levelText = result.risk_level === 'Low' ? '低風險' : result.risk_level === 'Moderate' ? '中度風險' : '高風險';
+        document.getElementById('prob-' + id).textContent = pct + ' %';
+        document.getElementById('level-' + id).textContent = levelText;
+        document.getElementById('demo-' + id).textContent = shortLine(demo);
+      }
+
+      render('low', DEMO_LOW);
+      render('mid', DEMO_MID);
+      render('high', DEMO_HIGH);
+    })();
+  </script>
+</body>
+</html>

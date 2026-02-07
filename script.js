@@ -124,7 +124,58 @@
     },
 
     COPY_FEEDBACK_DURATION_MS: 2500,
-    DEMO_DATA: {
+    /** 低風險 Demo：較年輕、生命徵象與檢驗正常、無病史 */
+    DEMO_DATA_LOW: {
+      age: 42,
+      gender: 'M',
+      height: 172,
+      weight: 68,
+      hr: 72,
+      sbp: 118,
+      dbp: 74,
+      rr: 16,
+      spo2: 98,
+      temp: 36.5,
+      wbc: 7.2,
+      hb: 14,
+      platelet: 220,
+      creatinine: 0.9,
+      bun: 12,
+      albumin: 4.2,
+      glucose: 92,
+      pleuraleffusion: '0',
+      MI: '0',
+      HF: '0',
+      e_GFR: 95,
+      potassium: 4.0
+    },
+    /** 中度風險 Demo */
+    DEMO_DATA_MID: {
+      age: 68,
+      gender: 'F',
+      height: 158,
+      weight: 62,
+      hr: 96,
+      sbp: 102,
+      dbp: 64,
+      rr: 20,
+      spo2: 94,
+      temp: 37.2,
+      wbc: 11,
+      hb: 10.2,
+      platelet: 152,
+      creatinine: 1.6,
+      bun: 26,
+      albumin: 3.1,
+      glucose: 128,
+      pleuraleffusion: '0',
+      MI: '0',
+      HF: '1',
+      e_GFR: 52,
+      potassium: 4.3
+    },
+    /** 高風險 Demo */
+    DEMO_DATA_HIGH: {
       age: 78,
       gender: 'M',
       height: 168,
@@ -192,7 +243,6 @@
   var btnCopy = document.getElementById('btn-copy');
   var copyFeedback = document.getElementById('copy-feedback');
   var btnReset = document.getElementById('btn-reset');
-  var btnDemo = document.getElementById('btn-demo');
   var toggleLabs = document.getElementById('toggle-labs');
   var labFieldset = document.getElementById('lab-fieldset');
 
@@ -282,7 +332,7 @@
     assert(CONFIG.RECOMMENDATIONS[result.level.id], 'recommendations exist for level');
 
     var payloadDemo = {
-      data: Object.assign({}, def, CONFIG.DEMO_DATA, { gender: 1 }),
+      data: Object.assign({}, def, CONFIG.DEMO_DATA_HIGH, { gender: 1 }),
       missing: [],
       rangeWarnings: []
     };
@@ -570,10 +620,10 @@
     if (toggleLabs) toggleLabs.checked = false;
   }
 
-  function onDemo() {
-    Object.keys(CONFIG.DEMO_DATA).forEach(function (name) {
+  function fillDemoData(data) {
+    Object.keys(data).forEach(function (name) {
       var el = form.elements[name];
-      if (el) el.value = CONFIG.DEMO_DATA[name];
+      if (el) el.value = data[name];
     });
     clearAllErrors();
     if (labFieldset) labFieldset.classList.add('lab-visible');
@@ -589,7 +639,9 @@
   form.addEventListener('submit', onSubmit);
   if (btnCopy) btnCopy.addEventListener('click', onCopy);
   if (btnReset) btnReset.addEventListener('click', onReset);
-  if (btnDemo) btnDemo.addEventListener('click', onDemo);
+  if (document.getElementById('btn-demo-low')) document.getElementById('btn-demo-low').addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_LOW); });
+  if (document.getElementById('btn-demo-mid')) document.getElementById('btn-demo-mid').addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_MID); });
+  if (document.getElementById('btn-demo-high')) document.getElementById('btn-demo-high').addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_HIGH); });
 
   if (form) {
     form.querySelectorAll('input, select').forEach(function (el) {
