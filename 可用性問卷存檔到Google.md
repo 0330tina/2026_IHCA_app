@@ -1,6 +1,27 @@
 # 可用性問卷存檔到 Google
 
-有兩種方式可讓問卷資料存到 Google（試算表或表單）。
+若 **無法使用 Apps Script**（例如環境限制、權限不足），可用以下兩種方式，不需任何程式部署。
+
+---
+
+## 若無法使用 Apps Script：兩種替代方式
+
+### 替代方式 A：改用 Google 表單（推薦，資料自動進試算表）
+
+不需寫程式，只要建立一個 Google 表單，問卷改為「前往 Google 表單填寫」即可，所有回覆會自動存到試算表。
+
+1. 前往 [Google 表單](https://forms.google.com) 建立新表單，標題如：**IHCA 風險預測平台可用性評估問卷**。
+2. 依下方「方式一」加入說明與 7 題（6 題單選 1–5、1 題選填段落）。
+3. 表單右上角 **傳送** → **連結** → 複製連結。
+4. 在 `questionnaire.html` 改為：說明文字 + 一個大按鈕「前往 Google 表單填寫」，點擊後開新視窗到該連結。
+5. 在表單的 **回覆** 中選 **連接到試算表**，之後所有填答都會出現在試算表。
+
+### 替代方式 B：App 內填寫，提交後下載 CSV 再匯入 Google
+
+保留目前問卷頁，使用者照常填寫並提交。**未設定 GOOGLE_SCRIPT_URL 時**，提交後會出現「下載回覆 (CSV)」按鈕。
+
+- 使用者下載 CSV 後，可到 [Google 試算表](https://sheets.google.com) → **檔案** → **匯入** → **上傳**，選擇該 CSV 匯入。
+- 多筆回覆可重複下載多個 CSV，再在試算表中手動貼上或合併。
 
 ---
 
@@ -34,9 +55,9 @@
 
 ---
 
-## 方式二：在 App 內填寫，送出時寫入 Google 試算表
+## 方式三：在 App 內填寫，送出時寫入 Google 試算表（需 Apps Script）
 
-保留目前 App 內的問卷頁，使用者照常填寫；提交時把資料送到 **Google Apps Script**，由腳本寫入 Google 試算表。
+保留目前 App 內的問卷頁，使用者照常填寫；提交時把資料送到 **Google Apps Script**，由腳本寫入 Google 試算表。**需能使用 Google 試算表的「擴充功能 → Apps Script」並部署為網路應用程式。**
 
 ### 步驟 1：建立 Google 試算表
 
@@ -47,12 +68,15 @@
 ### 步驟 2：寫入 Apps Script 並部署
 
 1. 在試算表選單：**擴充功能** → **Apps Script**。
-2. 刪除預設程式碼，貼上以下程式碼：
+2. 刪除預設程式碼，貼上以下程式碼（會自動在空白試算表寫入第一列標題）：
 
 ```javascript
 function doPost(e) {
   try {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['時間', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']);
+    }
     var data = JSON.parse(e.postData.contents);
     var row = [
       data.at || new Date().toISOString(),
@@ -89,5 +113,6 @@ function doPost(e) {
 
 ## 建議
 
-- **只想要資料在 Google、操作最少**：用 **方式一**，問卷改為連結到 Google 表單即可。
-- **希望使用者留在你的 App 裡填問卷、同時存到 Google**：用 **方式二**，完成試算表 + Apps Script 後，在問卷頁設定 `GOOGLE_SCRIPT_URL`。
+- **無法使用 Apps Script**：用 **替代方式 A**（Google 表單）或 **替代方式 B**（下載 CSV 再匯入試算表）。
+- **只想要資料在 Google、操作最少**：用 **方式一**（Google 表單），問卷改為連結到 Google 表單即可。
+- **能使用 Apps Script，且希望使用者留在 App 內填問卷**：用 **方式三**，完成試算表 + Apps Script 後，在問卷頁設定 `GOOGLE_SCRIPT_URL`。
