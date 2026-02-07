@@ -30,7 +30,7 @@ function doPost(e) {
     }
     var data = JSON.parse(e.postData.contents);
     var row = [
-      data.at || new Date().toISOString(),
+      new Date().toISOString(),  // 使用伺服器收到請求的當下時間
       data.role || '',
       data.q1 || '', data.q2 || '', data.q3 || '', data.q4 || '', data.q5 || '', data.q6 || '',
       data.q7 || ''
