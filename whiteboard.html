@@ -3,22 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#b8e0d2">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>IHCA Day-1 風險板 | 電子白板</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .whiteboard-page { background: #0f172a; min-height: 100vh; color: #e2e8f0; }
+    /* 馬卡龍風格：柔和 pastel，輕鬆不嚴肅 */
+    .whiteboard-page { background: #f5f0f9; min-height: 100vh; color: #4a4458; }
     .whiteboard-header {
-      background: linear-gradient(180deg, #0d9488 0%, #0f766e 100%);
-      color: #fff;
+      background: linear-gradient(135deg, #b8e0d2 0%, #a8d5c8 50%, #95c9bc 100%);
+      color: #2d6a4f;
       padding: 0.75rem 1.5rem;
       text-align: center;
       font-size: clamp(1rem, 2.5vw, 1.5rem);
       font-weight: 600;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 12px rgba(45, 106, 79, 0.15);
     }
-    .whiteboard-header small { display: block; font-size: 0.65em; font-weight: 400; opacity: 0.95; margin-top: 0.2rem; }
+    .whiteboard-header small { display: block; font-size: 0.65em; font-weight: 400; opacity: 0.9; margin-top: 0.2rem; color: #3d7a63; }
     .whiteboard-main {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -32,19 +33,19 @@
       .whiteboard-main { grid-template-columns: 1fr; }
     }
     .whiteboard-card {
-      border-radius: 12px;
+      border-radius: 20px;
       padding: 1.25rem;
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
       display: flex;
       flex-direction: column;
       justify-content: center;
       min-height: 200px;
-      border: 3px solid transparent;
+      border: 2px solid rgba(255,255,255,0.8);
     }
-    .whiteboard-card.level-low   { background: #064e3b; border-color: #0d9488; color: #99f6e4; }
-    .whiteboard-card.level-mid   { background: #78350f; border-color: #f59e0b; color: #fef3c7; }
-    .whiteboard-card.level-high  { background: #7f1d1d; border-color: #ef4444; color: #fecaca; }
+    .whiteboard-card.level-low   { background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%); color: #2d6a4f; }
+    .whiteboard-card.level-mid   { background: linear-gradient(160deg, #fff4d6 0%, #ffe4b8 100%); color: #8b6914; }
+    .whiteboard-card.level-high  { background: linear-gradient(160deg, #ffd6e0 0%, #ffc9d4 100%); color: #9d4b5a; }
     .whiteboard-card-title {
       font-size: clamp(1rem, 2vw, 1.35rem);
       font-weight: 700;
@@ -64,7 +65,7 @@
     }
     .whiteboard-card-demo {
       font-size: 0.8rem;
-      opacity: 0.9;
+      opacity: 0.85;
       margin-top: 0.75rem;
       line-height: 1.4;
       max-width: 100%;
@@ -75,10 +76,10 @@
       text-align: center;
       padding: 0.5rem 1rem;
       font-size: 0.75rem;
-      color: #64748b;
+      color: #8b7a9e;
     }
-    .whiteboard-link { color: #38bdf8; text-decoration: none; margin-left: 0.5rem; }
-    .whiteboard-link:hover { text-decoration: underline; }
+    .whiteboard-link { color: #7c6b9a; text-decoration: none; margin-left: 0.5rem; }
+    .whiteboard-link:hover { text-decoration: underline; color: #5a4a78; }
   </style>
 </head>
 <body class="whiteboard-page">

@@ -207,45 +207,44 @@
           <button type="button" id="btn-demo-high" class="btn btn-outline">高風險</button>
         </div>
       </form>
-    </section>
 
-    <!-- 右側：輸出區 -->
-    <section class="panel result-panel" id="result-panel" aria-live="polite">
-      <h2>風險評估結果</h2>
-      <div id="result-placeholder" class="result-placeholder">
-      </div>
-      <div id="result-content" class="result-content hidden">
-        <div class="result-score-row">
-          <div class="result-item">
-            <span class="result-label">風險分數</span>
-            <span id="display-score" class="result-value">—</span>
-            <span class="result-unit">分</span>
+      <!-- 結果區：按「計算」後顯示於此 -->
+      <div id="result-panel" class="result-panel-inline" aria-live="polite" style="display: none;">
+        <h2 class="panel-result-title">風險評估結果</h2>
+        <div id="result-placeholder" class="result-placeholder"></div>
+        <div id="result-content" class="result-content hidden">
+          <div class="result-score-row">
+            <div class="result-item">
+              <span class="result-label">風險分數</span>
+              <span id="display-score" class="result-value">—</span>
+              <span class="result-unit">分</span>
+            </div>
+            <div class="result-item result-level-wrap">
+              <span class="result-label">風險等級</span>
+              <span id="display-level" class="result-level" aria-hidden="true"></span>
+              <span id="display-level-icon" class="result-level-icon" aria-hidden="true"></span>
+            </div>
           </div>
-          <div class="result-item result-level-wrap">
-            <span class="result-label">風險等級</span>
-            <span id="display-level" class="result-level" aria-hidden="true"></span>
-            <span id="display-level-icon" class="result-level-icon" aria-hidden="true"></span>
+          <div id="missing-fields-block" class="result-block missing-block hidden">
+            <h3>缺少欄位</h3>
+            <p id="missing-fields-list" class="missing-list"></p>
           </div>
-        </div>
-        <div id="missing-fields-block" class="result-block missing-block hidden">
-          <h3>缺少欄位</h3>
-          <p id="missing-fields-list" class="missing-list"></p>
-        </div>
-        <div id="range-warnings-block" class="result-block warnings-block hidden">
-          <h3>超出合理範圍（已納入計算，請確認）</h3>
-          <ul id="range-warnings-list" class="warnings-list"></ul>
-        </div>
-        <div class="result-block">
-          <h3>建議處置</h3>
-          <ul id="display-recommendations" class="recommendation-list"></ul>
-        </div>
-        <div class="result-block">
-          <h3>可複製文字（貼入紀錄）</h3>
-          <div class="copy-row">
-            <button type="button" id="btn-copy" class="btn btn-outline">一鍵複製結果</button>
-            <span id="copy-feedback" class="copy-feedback" aria-live="polite"></span>
+          <div id="range-warnings-block" class="result-block warnings-block hidden">
+            <h3>超出合理範圍（已納入計算，請確認）</h3>
+            <ul id="range-warnings-list" class="warnings-list"></ul>
           </div>
-          <pre id="display-note" class="note-text"></pre>
+          <div class="result-block">
+            <h3>建議處置</h3>
+            <ul id="display-recommendations" class="recommendation-list"></ul>
+          </div>
+          <div class="result-block">
+            <h3>可複製文字（貼入紀錄）</h3>
+            <div class="copy-row">
+              <button type="button" id="btn-copy" class="btn btn-outline">一鍵複製結果</button>
+              <span id="copy-feedback" class="copy-feedback" aria-live="polite"></span>
+            </div>
+            <pre id="display-note" class="note-text"></pre>
+          </div>
         </div>
       </div>
     </section>

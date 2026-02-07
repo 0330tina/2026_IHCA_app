@@ -5,6 +5,8 @@
 (function () {
   'use strict';
 
+  function run() {
+
   // =============================================================================
   // CONFIG：所有可調參數集中於此，無 magic numbers 散落程式碼
   // =============================================================================
@@ -513,12 +515,18 @@
       displayRecommendations.appendChild(li);
     });
     displayNote.textContent = noteText;
-    document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    var resultPanel = document.getElementById('result-panel');
+    if (resultPanel) {
+      resultPanel.style.display = 'block';
+      resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
   }
 
   function hideResult() {
     resultContent.classList.add('hidden');
     resultPlaceholder.classList.remove('hidden');
+    var resultPanel = document.getElementById('result-panel');
+    if (resultPanel) resultPanel.style.display = 'none';
   }
 
   /** 由表單組出邏輯式回歸模組所需輸入（缺項用預設），供導向結果頁使用 */
@@ -645,12 +653,15 @@
     });
   }
 
-  form.addEventListener('submit', onSubmit);
+  if (form) form.addEventListener('submit', onSubmit);
   if (btnCopy) btnCopy.addEventListener('click', onCopy);
   if (btnReset) btnReset.addEventListener('click', onReset);
-  if (document.getElementById('btn-demo-low')) document.getElementById('btn-demo-low').addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_LOW); });
-  if (document.getElementById('btn-demo-mid')) document.getElementById('btn-demo-mid').addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_MID); });
-  if (document.getElementById('btn-demo-high')) document.getElementById('btn-demo-high').addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_HIGH); });
+  var btnDemoLow = document.getElementById('btn-demo-low');
+  var btnDemoMid = document.getElementById('btn-demo-mid');
+  var btnDemoHigh = document.getElementById('btn-demo-high');
+  if (btnDemoLow) btnDemoLow.addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_LOW); });
+  if (btnDemoMid) btnDemoMid.addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_MID); });
+  if (btnDemoHigh) btnDemoHigh.addEventListener('click', function () { fillDemoData(CONFIG.DEMO_DATA_HIGH); });
 
   if (form) {
     form.querySelectorAll('input, select').forEach(function (el) {
@@ -662,4 +673,11 @@
   }
 
   runSelfCheck();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
 })();
