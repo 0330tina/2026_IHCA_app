@@ -610,6 +610,9 @@
 
   function onSubmit(e) {
     e.preventDefault();
+    e.stopPropagation();
+    // 確保有 form 參考（若 init 時未取得，例如腳本載入時機問題）
+    if (!form) form = document.getElementById('risk-form') || (e.target && e.target.id === 'risk-form' ? e.target : null);
     clearAllErrors();
     if (!form) return;
     if (!validateForm()) {
@@ -739,7 +742,14 @@
     });
   }
 
-  if (form) form.addEventListener('submit', onSubmit);
+  // 用 document 攔截 submit，避免 form 為 null 時完全沒反應（表單會預設送出並重整頁面）
+  document.addEventListener('submit', function (e) {
+    if (e.target && e.target.id === 'risk-form') {
+      e.preventDefault();
+      e.stopPropagation();
+      onSubmit(e);
+    }
+  }, true);
   if (btnCopy) btnCopy.addEventListener('click', onCopy);
   if (btnReset) btnReset.addEventListener('click', onReset);
   var btnDemoLow = document.getElementById('btn-demo-low');
