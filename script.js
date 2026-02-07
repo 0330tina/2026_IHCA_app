@@ -621,9 +621,18 @@
   }
 
   function fillDemoData(data) {
+    if (!form) return;
     Object.keys(data).forEach(function (name) {
       var el = form.elements[name];
-      if (el) el.value = data[name];
+      if (!el) return;
+      var val = data[name];
+      if (el.type === 'radio' && el.length !== undefined) {
+        for (var i = 0; i < el.length; i++) {
+          el[i].checked = (String(el[i].value) === String(val));
+        }
+      } else {
+        el.value = (val !== undefined && val !== null) ? String(val) : '';
+      }
     });
     clearAllErrors();
     if (labFieldset) labFieldset.classList.add('lab-visible');
