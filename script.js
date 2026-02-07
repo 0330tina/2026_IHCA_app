@@ -367,9 +367,17 @@
 
   // ----- Form helpers
   function getValue(name) {
+    if (!form) return null;
     var el = form.elements[name];
     if (!el) return null;
-    var raw = el.value.trim();
+    // Radio 群組：部分環境 form.elements[name] 為 RadioNodeList 或類似集合
+    if (typeof el.length === 'number' && el.length > 0) {
+      for (var i = 0; i < el.length; i++) {
+        if (el[i].checked) return el[i].value;
+      }
+      return null;
+    }
+    var raw = (el.value != null ? el.value : '').toString().trim();
     if (raw === '') return null;
     if (el.type === 'number') {
       var num = parseFloat(raw);
@@ -615,25 +623,52 @@
     try {
       var probability;
       var riskLevel;
+      var payload;
+      var scoreForDisplay;
+      var levelForDisplay;
+      var noteText;
+      var useProbability = false;
+
       if (typeof IHCARiskCalc !== 'undefined') {
         var input = buildRiskCalcInput();
         var result = IHCARiskCalc.calculate(input);
         probability = result.probability;
         riskLevel = result.risk_level;
+        payload = collectDataForCalc();
+        scoreForDisplay = Math.round(probability * 100);
+        levelForDisplay = riskLevelToDisplay(riskLevel);
+        noteText = buildNoteTextForRiskCalc(payload, { probability: probability, risk_level: riskLevel });
+        useProbability = true;
       } else {
-        var payload = collectDataForCalc();
+        payload = collectDataForCalc();
         var result = computeRiskResult(payload);
         probability = result.score / 100;
         riskLevel = result.level.id === 'low' ? 'Low' : result.level.id === 'mid' ? 'Moderate' : 'High';
+        scoreForDisplay = result.score;
+        levelForDisplay = result.level;
+        noteText = buildNoteText(payload.data, result.score, result.level, payload.missing, payload.rangeWarnings);
       }
-      sessionStorage.setItem('ihca_result', JSON.stringify({
-        probability: probability,
-        risk_level: riskLevel
-      }));
+
+      try {
+        sessionStorage.setItem('ihca_result', JSON.stringify({
+          probability: probability,
+          risk_level: riskLevel
+        }));
+      } catch (storageErr) {
+        if (typeof console !== 'undefined' && console.warn) console.warn('sessionStorage 無法寫入，結果頁可能無法顯示', storageErr);
+      }
+
       window.location.href = 'result.html';
+
+      // 若因環境（如 file:// 或權限）無法跳轉，改在同頁顯示結果
+      setTimeout(function () {
+        if (window.location.href.indexOf('result.html') === -1) {
+          showResult(payload, scoreForDisplay, levelForDisplay, noteText, useProbability ? { useProbability: true } : undefined);
+        }
+      }, 350);
     } catch (err) {
       if (typeof console !== 'undefined' && console.error) console.error(err);
-      alert('計算時發生錯誤，請確認必填欄位（年齡）已填寫，或稍後再試。');
+      alert('計算時發生錯誤：' + (err && err.message ? err.message : String(err)) + '\n請確認必填欄位（年齡）已填寫，或稍後再試。');
     }
   }
 
