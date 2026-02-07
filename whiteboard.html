@@ -13,12 +13,37 @@
       background: linear-gradient(135deg, #b8e0d2 0%, #a8d5c8 50%, #95c9bc 100%);
       color: #2d6a4f;
       padding: 0.75rem 1.5rem;
+      padding-right: 6rem;
       text-align: center;
       font-size: clamp(1rem, 2.5vw, 1.5rem);
       font-weight: 600;
       box-shadow: 0 2px 12px rgba(45, 106, 79, 0.15);
+      position: relative;
     }
     .whiteboard-header small { display: block; font-size: 0.65em; font-weight: 400; opacity: 0.9; margin-top: 0.2rem; color: #3d7a63; }
+    .whiteboard-header-btn {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #2d6a4f;
+      background: rgba(255,255,255,0.9);
+      border: 2px solid rgba(45, 106, 79, 0.4);
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .whiteboard-header-btn:hover {
+      background: #fff;
+      border-color: #2d6a4f;
+      color: #1e4d3d;
+    }
     .whiteboard-summary {
       max-width: 1200px;
       margin: 0 auto;
@@ -85,6 +110,7 @@
 </head>
 <body class="whiteboard-page">
   <header class="whiteboard-header">
+    <a href="index.html" class="whiteboard-header-btn">回主頁</a>
     IHCA Day-1 入院首日風險板
     <small>電子白板示範 — 15 位病人 · 病房各風險百分比</small>
   </header>
