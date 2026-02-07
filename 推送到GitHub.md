@@ -101,6 +101,56 @@ git push -u origin main
 
 ---
 
+## 使用 GitHub Desktop 連線（圖形介面）
+
+若不想用指令，可用 **GitHub Desktop** 連線與推送，免輸入 Token。
+
+### 1. 安裝並登入 GitHub Desktop
+
+1. 到 [https://desktop.github.com](https://desktop.github.com) 下載並安裝。
+2. 開啟 GitHub Desktop，點 **File** → **Options** → **Accounts**，用你的 **GitHub 帳號登入**（會開瀏覽器完成授權，不需 Token）。
+
+### 2. 加入現有專案（本機已有 2026_IHCA_app 資料夾）
+
+1. 點 **File** → **Add local repository**（或 Ctrl+O）。
+2. 按 **Choose...**，選取你的專案資料夾，例如：
+   `C:\Users\tina0\OneDrive\桌面\2026_IHCA_app`
+3. 若該資料夾**已有 .git**，會直接加入並顯示「此倉庫已存在」；左側會出現你的倉庫名稱，下方會列出變更的檔案。
+4. 若顯示「這不是一個 Git 倉庫」，先到終端機在該目錄執行：
+   ```bash
+   git init
+   git remote add origin https://github.com/0330tina/2026_IHCA_app.git
+   ```
+   再回到 GitHub Desktop 重新 **Add local repository** 選同一個資料夾。
+
+### 3. 確認遠端已連到 GitHub
+
+1. 在 GitHub Desktop 上方選單點 **Repository** → **Repository settings**（或 **Remote**）。
+2. 確認 **Primary remote repository (origin)** 為：
+   `https://github.com/0330tina/2026_IHCA_app.git`
+3. 若沒有或網址錯誤，可在此新增或修改；或到終端機執行：
+   ```bash
+   git remote add origin https://github.com/0330tina/2026_IHCA_app.git
+   ```
+   （若已有 origin 但網址錯，可用 `git remote set-url origin https://github.com/0330tina/2026_IHCA_app.git`）
+
+### 4. 推送（Push）到 GitHub
+
+1. 左下方 **Summary** 輸入這次修改的說明，例如：`IHCA App：公式說明、移除病房、GitHub 說明`。
+2. 按 **Commit to main**（或 Commit to master）。
+3. 上方選單點 **Push origin**（或 **Repository** → **Push**），把本機提交推送到 GitHub。
+
+之後每次改完程式，只要在 GitHub Desktop 寫 Summary → **Commit to main** → **Push origin** 即可，不需再輸入密碼或 Token。
+
+### 5. 若從 GitHub 抓專案（本機還沒有資料夾）
+
+1. 在 GitHub Desktop 點 **File** → **Clone repository**。
+2. 選 **GitHub.com**，在列表選 `0330tina/2026_IHCA_app`（或輸入網址）。
+3. **Local path** 選要存放的位置（例如桌面），按 **Clone**。
+4. 之後在左側選這個倉庫，即可在此做修改、Commit、Push。
+
+---
+
 ## 一、之後每次要推送更新（已連線過）
 
 若專案已經和 GitHub 連線過，之後只要把**本機修改**推上去即可。若 GitHub 沒有更新，代表本機的變更尚未 **commit** 或 **push**。
