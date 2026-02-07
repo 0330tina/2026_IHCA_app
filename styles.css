@@ -210,9 +210,11 @@ body {
   }
 }
 
-/* 檢驗區塊：一律顯示 */
-.lab-fieldset .lab-fields {
-  display: block;
+/* 檢驗區塊：一律顯示，不隱藏 */
+.lab-fieldset .lab-fields,
+.lab-fieldset.lab-visible .lab-fields {
+  display: block !important;
+  visibility: visible !important;
 }
 
 .form-row {
