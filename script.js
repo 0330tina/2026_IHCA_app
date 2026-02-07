@@ -391,13 +391,23 @@
   }
 
   function setFieldError(name, message, isWarn) {
+    if (!form) return !message;
     var errEl = document.getElementById(getErrId(name));
     var inputEl = form.elements[name];
     if (errEl) errEl.textContent = message || '';
+    // Radio 群組為 RadioNodeList，沒有 classList；需對單一元素或群組內每個元素設定
+    var targets = [];
     if (inputEl) {
-      inputEl.classList.toggle('error', !!message && !isWarn);
-      inputEl.classList.toggle('warn-range', !!message && isWarn);
+      if (typeof inputEl.length === 'number' && inputEl.length > 0) {
+        for (var i = 0; i < inputEl.length; i++) targets.push(inputEl[i]);
+      } else if (inputEl.classList) {
+        targets.push(inputEl);
+      }
     }
+    targets.forEach(function (el) {
+      el.classList.toggle('error', !!message && !isWarn);
+      el.classList.toggle('warn-range', !!message && isWarn);
+    });
     return !message;
   }
 
