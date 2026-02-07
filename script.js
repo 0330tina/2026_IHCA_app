@@ -613,20 +613,24 @@
       return;
     }
     try {
+      var probability;
+      var riskLevel;
       if (typeof IHCARiskCalc !== 'undefined') {
         var input = buildRiskCalcInput();
         var result = IHCARiskCalc.calculate(input);
+        probability = result.probability;
+        riskLevel = result.risk_level;
+      } else {
         var payload = collectDataForCalc();
-        var pctStr = (result.probability * 100).toFixed(1) + ' %';
-        var level = riskLevelToDisplay(result.risk_level);
-        var noteText = buildNoteTextForRiskCalc(payload, result);
-        showResult(payload, pctStr, level, noteText, { useProbability: true });
-        return;
+        var result = computeRiskResult(payload);
+        probability = result.score / 100;
+        riskLevel = result.level.id === 'low' ? 'Low' : result.level.id === 'mid' ? 'Moderate' : 'High';
       }
-      var payload = collectDataForCalc();
-      var result = computeRiskResult(payload);
-      var noteText = buildNoteText(payload.data, result.score, result.level, payload.missing, payload.rangeWarnings);
-      showResult(payload, result.score, result.level, noteText);
+      sessionStorage.setItem('ihca_result', JSON.stringify({
+        probability: probability,
+        risk_level: riskLevel
+      }));
+      window.location.href = 'result.html';
     } catch (err) {
       if (typeof console !== 'undefined' && console.error) console.error(err);
       alert('計算時發生錯誤，請確認必填欄位（年齡）已填寫，或稍後再試。');
