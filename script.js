@@ -405,8 +405,10 @@
       }
     }
     targets.forEach(function (el) {
-      el.classList.toggle('error', !!message && !isWarn);
-      el.classList.toggle('warn-range', !!message && isWarn);
+      if (el && el.classList) {
+        el.classList.toggle('error', !!message && !isWarn);
+        el.classList.toggle('warn-range', !!message && isWarn);
+      }
     });
     return !message;
   }

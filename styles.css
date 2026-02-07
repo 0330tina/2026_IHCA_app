@@ -663,6 +663,82 @@ input::placeholder {
   .result-card .result-prob-value { font-size: 1.5rem; }
 }
 
+/* ----- 結果頁：電子白板馬卡龍配色（與 whiteboard.html 一致）----- */
+.result-page-whiteboard {
+  background: #f5f0f9;
+  color: #4a4458;
+}
+.result-page-whiteboard .header-result {
+  background: linear-gradient(135deg, #b8e0d2 0%, #a8d5c8 50%, #95c9bc 100%);
+  color: #2d6a4f;
+  box-shadow: 0 2px 12px rgba(45, 106, 79, 0.15);
+}
+.result-page-whiteboard .result-main {
+  background: transparent;
+}
+.result-page-whiteboard .result-card {
+  background: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+.result-page-whiteboard .result-card[data-level="Low"] {
+  background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%);
+  border-color: rgba(197, 232, 208, 0.6);
+}
+.result-page-whiteboard .result-card[data-level="Moderate"] {
+  background: linear-gradient(160deg, #fff4d6 0%, #ffe4b8 100%);
+  border-color: rgba(255, 228, 184, 0.6);
+}
+.result-page-whiteboard .result-card[data-level="High"] {
+  background: linear-gradient(160deg, #ffd6e0 0%, #ffc9d4 100%);
+  border-color: rgba(255, 201, 212, 0.6);
+}
+.result-page-whiteboard .result-card .result-prob-label,
+.result-page-whiteboard .result-card .result-level-label {
+  color: #4a4458;
+}
+.result-page-whiteboard .result-card .result-prob-value {
+  color: #2d3748;
+}
+.result-page-whiteboard .result-card .result-level-ref,
+.result-page-whiteboard .result-card .result-disclaimer {
+  color: #6b7280;
+}
+.result-page-whiteboard .result-card[data-level="Low"] .result-level-value {
+  color: #2d6a4f;
+}
+.result-page-whiteboard .result-card[data-level="Moderate"] .result-level-value {
+  color: #8b6914;
+}
+.result-page-whiteboard .result-card[data-level="High"] .result-level-value {
+  color: #9d4b5a;
+}
+.result-page-whiteboard .result-explanation {
+  border-top-color: rgba(74, 68, 88, 0.12);
+}
+.result-page-whiteboard .result-explanation p {
+  color: #4a4458;
+}
+.result-page-whiteboard .result-actions .btn-questionnaire {
+  background: #fff;
+  color: #2d6a4f;
+  border: 2px solid #a8d5c8;
+}
+.result-page-whiteboard .result-actions .btn-questionnaire:hover {
+  background: rgba(184, 224, 210, 0.25);
+  border-color: #95c9bc;
+}
+.result-page-whiteboard .result-actions .btn-back {
+  background: linear-gradient(135deg, #b8e0d2 0%, #95c9bc 100%);
+  color: #2d6a4f;
+  border: none;
+}
+.result-page-whiteboard .result-actions .btn-back:hover {
+  background: linear-gradient(135deg, #a8d5c8 0%, #85c1b3 100%);
+  color: #1e4d3d;
+}
+
 /* ===== 可用性問卷頁（questionnaire.html）===== */
 .questionnaire-page .header-result .header-inner { max-width: none; }
 .questionnaire-page .header-result h1 { margin: 0; font-size: 1.25rem; font-weight: 600; }
