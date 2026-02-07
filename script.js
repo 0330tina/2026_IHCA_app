@@ -742,7 +742,7 @@
     });
   }
 
-  // 用 document 攔截 submit，避免 form 為 null 時完全沒反應（表單會預設送出並重整頁面）
+  // 用 document 攔截 submit（例如在表單內按 Enter）
   document.addEventListener('submit', function (e) {
     if (e.target && e.target.id === 'risk-form') {
       e.preventDefault();
@@ -750,6 +750,17 @@
       onSubmit(e);
     }
   }, true);
+
+  // 「計算」按鈕改為 type="button"，直接綁定 click，確保點擊一定會觸發計算
+  var btnCalc = document.getElementById('btn-calc');
+  var riskFormEl = document.getElementById('risk-form');
+  if (btnCalc) {
+    btnCalc.addEventListener('click', function (e) {
+      e.preventDefault();
+      onSubmit({ preventDefault: function () {}, stopPropagation: function () {}, target: riskFormEl || null });
+    });
+  }
+
   if (btnCopy) btnCopy.addEventListener('click', onCopy);
   if (btnReset) btnReset.addEventListener('click', onReset);
   var btnDemoLow = document.getElementById('btn-demo-low');
