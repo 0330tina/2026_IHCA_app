@@ -101,6 +101,9 @@
 
   <script>
     (function () {
+      // 若要存檔到 Google 試算表，請在 Google 試算表建立 Apps Script 並部署為網路應用程式，把網址貼在下方（見 可用性問卷存檔到Google.md）
+      var GOOGLE_SCRIPT_URL = '';  // 例：'https://script.google.com/macros/s/xxxxxxxx/exec'
+
       var form = document.getElementById('usability-form');
       var thanks = document.getElementById('questionnaire-thanks');
       form.addEventListener('submit', function (e) {
@@ -111,15 +114,28 @@
           q1to6.push(r ? r.value : '');
         }
         var q7 = form.querySelector('#q7').value.trim();
+        var payload = {
+          q1: q1to6[0], q2: q1to6[1], q3: q1to6[2], q4: q1to6[3], q5: q1to6[4], q6: q1to6[5],
+          q7: q7,
+          at: new Date().toISOString()
+        };
         try {
-          localStorage.setItem('ihca_usability', JSON.stringify({
-            q1: q1to6[0], q2: q1to6[1], q3: q1to6[2], q4: q1to6[3], q5: q1to6[4], q6: q1to6[5],
-            q7: q7,
-            at: new Date().toISOString()
-          }));
+          localStorage.setItem('ihca_usability', JSON.stringify(payload));
         } catch (err) {}
-        form.classList.add('hidden');
-        thanks.classList.remove('hidden');
+        if (GOOGLE_SCRIPT_URL) {
+          fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }).catch(function () {}).then(function () {
+            form.classList.add('hidden');
+            thanks.classList.remove('hidden');
+          });
+        } else {
+          form.classList.add('hidden');
+          thanks.classList.remove('hidden');
+        }
       });
     })();
   </script>

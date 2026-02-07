@@ -50,7 +50,12 @@
       creatinine: 1,
       bun: 15,
       albumin: 3.5,
-      glucose: 100
+      glucose: 100,
+      pleuraleffusion: 0,
+      MI: 0,
+      HF: 0,
+      e_GFR: 60,
+      potassium: 4
     },
 
     /** 點數規則用閾值，統一於此避免 magic numbers */
@@ -136,7 +141,12 @@
       creatinine: 2.4,
       bun: 38,
       albumin: 2.8,
-      glucose: 165
+      glucose: 165,
+      pleuraleffusion: '0',
+      MI: '0',
+      HF: '1',
+      e_GFR: 45,
+      potassium: 4.2
     }
   };
 
@@ -158,7 +168,12 @@
     creatinine: { unit: 'mg/dL', min: 0.3, max: 15,  required: false, label: 'Creatinine' },
     bun:        { unit: 'mg/dL', min: 5,   max: 120, required: false, label: 'BUN' },
     albumin:    { unit: 'g/dL', min: 2,   max: 5,   required: false, label: 'Albumin' },
-    glucose:    { unit: 'mg/dL', min: 40,  max: 500, required: false, label: 'Glucose' }
+    glucose:    { unit: 'mg/dL', min: 40,  max: 500, required: false, label: 'Glucose' },
+    pleuraleffusion: { unit: '', min: null, max: null, required: false, label: '肋膜積水', options: { '0': '否', '1': '是' } },
+    MI:         { unit: '', min: null, max: null, required: false, label: '心肌梗塞(MI)', options: { '0': '否', '1': '是' } },
+    HF:         { unit: '', min: null, max: null, required: false, label: '心衰竭(HF)', options: { '0': '否', '1': '是' } },
+    e_GFR:      { unit: 'mL/min/1.73m²', min: 5, max: 150, required: false, label: 'e_GFR' },
+    potassium:  { unit: 'mEq/L', min: 2, max: 8, required: false, label: '鉀(K)' }
   };
 
   // ----- DOM refs
@@ -400,7 +415,8 @@
     lines.push('【IHCA Day-1 入院首日風險評估】');
     lines.push('基本：年齡 ' + getDisplayValue('age', data.age) + '、性別 ' + getDisplayValue('gender', data.gender) + '、身高 ' + getDisplayValue('height', data.height) + '、體重 ' + getDisplayValue('weight', data.weight));
     lines.push('Day-1 生命徵象：HR ' + getDisplayValue('hr', data.hr) + '、SBP ' + getDisplayValue('sbp', data.sbp) + '、DBP ' + getDisplayValue('dbp', data.dbp) + '、RR ' + getDisplayValue('rr', data.rr) + '、SpO2 ' + getDisplayValue('spo2', data.spo2) + '、Temp ' + getDisplayValue('temp', data.temp));
-    lines.push('Day-1 檢驗：WBC ' + getDisplayValue('wbc', data.wbc) + '、Hb ' + getDisplayValue('hb', data.hb) + '、Platelet ' + getDisplayValue('platelet', data.platelet) + '、Creatinine ' + getDisplayValue('creatinine', data.creatinine) + '、BUN ' + getDisplayValue('bun', data.bun) + '、Albumin ' + getDisplayValue('albumin', data.albumin) + '、Glucose ' + getDisplayValue('glucose', data.glucose));
+    lines.push('病史：肋膜積水 ' + getDisplayValue('pleuraleffusion', data.pleuraleffusion) + '、MI ' + getDisplayValue('MI', data.MI) + '、HF ' + getDisplayValue('HF', data.HF));
+    lines.push('Day-1 檢驗：WBC ' + getDisplayValue('wbc', data.wbc) + '、Hb ' + getDisplayValue('hb', data.hb) + '、Platelet ' + getDisplayValue('platelet', data.platelet) + '、Creatinine ' + getDisplayValue('creatinine', data.creatinine) + '、BUN ' + getDisplayValue('bun', data.bun) + '、Albumin ' + getDisplayValue('albumin', data.albumin) + '、Glucose ' + getDisplayValue('glucose', data.glucose) + '、e_GFR ' + getDisplayValue('e_GFR', data.e_GFR) + '、鉀 ' + getDisplayValue('potassium', data.potassium));
     if (missing.length) lines.push('缺少欄位：' + missing.join('、'));
     if (rangeWarnings.length) lines.push('超出合理範圍（已納入計算）：' + rangeWarnings.join('；'));
     lines.push('');
@@ -463,6 +479,9 @@
       Sex: 0, pleuraleffusion: 0, MI: 0, HF: 0, Albumin: 3.5, GlucoseAC: 100,
       Hemoglobin: 12, WBC: 8, e_GFR: 60, Potassium: 4
     };
+    var p = getValue('pleuraleffusion');
+    var mi = getValue('MI');
+    var hf = getValue('HF');
     var input = {
       Temp__01_1: getValue('temp') != null ? getValue('temp') : def.Temp__01_1,
       Sp_01_1: getValue('sbp') != null ? getValue('sbp') : def.Sp_01_1,
@@ -470,15 +489,15 @@
       Spo2_01_1: getValue('spo2') != null ? getValue('spo2') : def.Spo2_01_1,
       Age_per_10_year: age != null ? age / 10 : def.Age_per_10_year,
       Sex: getValue('gender') === 'M' ? 1 : getValue('gender') === 'F' ? 0 : 0,
-      pleuraleffusion: def.pleuraleffusion,
-      MI: def.MI,
-      HF: def.HF,
+      pleuraleffusion: (p !== null && p !== '') ? Number(p) : def.pleuraleffusion,
+      MI: (mi !== null && mi !== '') ? Number(mi) : def.MI,
+      HF: (hf !== null && hf !== '') ? Number(hf) : def.HF,
       Albumin: getValue('albumin') != null ? getValue('albumin') : def.Albumin,
       GlucoseAC: getValue('glucose') != null ? getValue('glucose') : def.GlucoseAC,
       Hemoglobin: getValue('hb') != null ? getValue('hb') : def.Hemoglobin,
       WBC: getValue('wbc') != null ? getValue('wbc') : def.WBC,
-      e_GFR: def.e_GFR,
-      Potassium: def.Potassium
+      e_GFR: getValue('e_GFR') != null ? Number(getValue('e_GFR')) : def.e_GFR,
+      Potassium: getValue('potassium') != null ? Number(getValue('potassium')) : def.Potassium
     };
     return input;
   }
