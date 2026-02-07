@@ -23,7 +23,7 @@
 
     <form id="usability-form" class="questionnaire-card">
       <div class="q-item">
-        <label class="q-label">填寫身分 <span class="required">*</span></label>
+        <label class="q-label">填寫身分</label>
         <div class="q-options" role="group" aria-label="填寫身分">
           <label class="q-opt"><input type="radio" name="role" value="醫師"> 醫師</label>
           <label class="q-opt"><input type="radio" name="role" value="護理師"> 護理師</label>
@@ -114,7 +114,7 @@
   <script>
     (function () {
       // 存檔到 Google 試算表：在試算表建立 Apps Script 並部署為網路應用程式，網址貼在下方（見 可用性問卷存檔到Google.md）。資料於後台試算表查看即可。
-      var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzWogW0u9OS3aYvH6rPH-A4jbnaPTorBeQx0k-7tvDD9AMgtkPLIQfcLYMNIsXH6cNm8A/exec';
+      var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwg2GFc0xa2YClib1NKyPRZNfAbttsRlrRUodhRG7_yEI4x0bzI6JtXIFXgy8PDKh1zpA/exec';
 
       var form = document.getElementById('usability-form');
       var thanks = document.getElementById('questionnaire-thanks');
@@ -122,10 +122,6 @@
         e.preventDefault();
         var roleEl = form.querySelector('input[name="role"]:checked');
         var role = roleEl ? roleEl.value : '';
-        if (!role) {
-          alert('請選擇填寫身分。');
-          return;
-        }
         var q1to6 = [];
         for (var i = 1; i <= 6; i++) {
           var r = form.querySelector('input[name="q' + i + '"]:checked');
@@ -142,12 +138,21 @@
           localStorage.setItem('ihca_usability', JSON.stringify(payload));
         } catch (err) {}
         if (GOOGLE_SCRIPT_URL) {
+          if (typeof console !== 'undefined' && console.log) {
+            console.log('[問卷] 送出至:', GOOGLE_SCRIPT_URL);
+            console.log('[問卷] 內容:', payload);
+          }
+          if (GOOGLE_SCRIPT_URL.indexOf('/exec') === -1) {
+            alert('請確認 GOOGLE_SCRIPT_URL 為正式部署網址（結尾為 /exec），目前可能為測試網址（/dev）。');
+          }
           fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
-          }).catch(function () {}).then(function () {
+          }).catch(function (err) {
+            if (typeof console !== 'undefined' && console.error) console.error('[問卷] 送出失敗', err);
+          }).then(function () {
             form.classList.add('hidden');
             thanks.classList.remove('hidden');
             var googleMsg = document.getElementById('thanks-google-msg');

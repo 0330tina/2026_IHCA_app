@@ -67,8 +67,12 @@
 
 ### 步驟 2：寫入 Apps Script 並部署
 
-1. 在試算表選單：**擴充功能** → **Apps Script**。
-2. 刪除預設程式碼，貼上以下程式碼（會自動在空白試算表寫入第一列標題）：
+1. 在試算表選單：**擴充功能** → **Apps Script**（或到 [script.google.com](https://script.google.com) 建立獨立專案）。
+2. 刪除預設程式碼，貼上以下程式碼。
+
+**重要：若你是「獨立專案」或執行時出現「沒有使用中的試算表」等錯誤，請改用下方「寫法 B」並填入試算表 ID。**
+
+**寫法 A（腳本從試算表內建立：擴充功能 → Apps Script，不需填 ID）**
 
 ```javascript
 // 用瀏覽器打開部署後的 URL 可觸發授權並確認已就緒（必做一次）
@@ -84,6 +88,49 @@ function doPost(e) {
         .setMimeType(ContentService.MimeType.JSON);
     }
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(['時間', '身分', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']);
+    }
+    var data = JSON.parse(e.postData.contents);
+    var row = [
+      data.at || new Date().toISOString(),
+      data.role || '',
+      data.q1 || '', data.q2 || '', data.q3 || '', data.q4 || '', data.q5 || '', data.q6 || '',
+      data.q7 || ''
+    ];
+    sheet.appendRow(row);
+    return ContentService.createTextOutput(JSON.stringify({ success: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ success: false, error: err.toString() }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+```
+
+**寫法 B（指定試算表 ID：獨立專案或 getActiveSpreadsheet 報錯時用）**
+
+1. 取得試算表 ID：打開要收資料的那個 Google 試算表，看網址列，`https://docs.google.com/spreadsheets/d/` **後面那一串**就是 ID。  
+   例：`https://docs.google.com/spreadsheets/d/1Ba5o_-nuUvBAHK0Ymhq9_vLiqqsHVicpMZyWSxRcF24/edit` → ID 為 `1Ba5o_-nuUvBAHK0Ymhq9_vLiqqsHVicpMZyWSxRcF24`。
+2. 把下面程式碼裡的 **`YOUR_SPREADSHEET_ID`** 替換成你的試算表 ID（保留引號）。
+
+```javascript
+function doGet() {
+  return ContentService.createTextOutput('問卷寫入已就緒，請在問卷頁提交。')
+    .setMimeType(ContentService.MimeType.TEXT);
+}
+
+function doPost(e) {
+  try {
+    if (!e || !e.postData || !e.postData.contents) {
+      return ContentService.createTextOutput(JSON.stringify({ success: false, error: 'no body' }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    // ==============================
+    // 重要：請將 YOUR_SPREADSHEET_ID 替換為你的試算表 ID（網址中 /d/ 後面那串）
+    // ==============================
+    var sheetId = 'YOUR_SPREADSHEET_ID';
+    var sheet = SpreadsheetApp.openById(sheetId).getActiveSheet();
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(['時間', '身分', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']);
     }
