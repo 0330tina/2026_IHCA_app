@@ -124,7 +124,6 @@
       gender: 'M',
       height: 168,
       weight: 72,
-      ward: '5A 內科',
       hr: 105,
       sbp: 88,
       dbp: 55,
@@ -147,7 +146,6 @@
     gender:     { unit: '',     min: null, max: null, required: false, label: '性別', options: { M: '男', F: '女', O: '其他' } },
     height:     { unit: 'cm',   min: 100,  max: 220, required: false, label: '身高' },
     weight:     { unit: 'kg',   min: 30,   max: 200, required: false, label: '體重' },
-    ward:       { unit: '',     min: null, max: null, required: false, label: '病房/科別' },
     hr:         { unit: 'bpm',  min: 30,   max: 250, required: false, label: 'HR' },
     sbp:        { unit: 'mmHg', min: 70,   max: 250, required: false, label: 'SBP' },
     dbp:        { unit: 'mmHg', min: 40,   max: 150, required: false, label: 'DBP' },
@@ -400,7 +398,7 @@
   function buildNoteText(data, score, level, missing, rangeWarnings) {
     var lines = [];
     lines.push('【IHCA Day-1 入院首日風險評估】');
-    lines.push('基本：年齡 ' + getDisplayValue('age', data.age) + '、性別 ' + getDisplayValue('gender', data.gender) + '、身高 ' + getDisplayValue('height', data.height) + '、體重 ' + getDisplayValue('weight', data.weight) + '、病房/科別 ' + getDisplayValue('ward', data.ward));
+    lines.push('基本：年齡 ' + getDisplayValue('age', data.age) + '、性別 ' + getDisplayValue('gender', data.gender) + '、身高 ' + getDisplayValue('height', data.height) + '、體重 ' + getDisplayValue('weight', data.weight));
     lines.push('Day-1 生命徵象：HR ' + getDisplayValue('hr', data.hr) + '、SBP ' + getDisplayValue('sbp', data.sbp) + '、DBP ' + getDisplayValue('dbp', data.dbp) + '、RR ' + getDisplayValue('rr', data.rr) + '、SpO2 ' + getDisplayValue('spo2', data.spo2) + '、Temp ' + getDisplayValue('temp', data.temp));
     lines.push('Day-1 檢驗：WBC ' + getDisplayValue('wbc', data.wbc) + '、Hb ' + getDisplayValue('hb', data.hb) + '、Platelet ' + getDisplayValue('platelet', data.platelet) + '、Creatinine ' + getDisplayValue('creatinine', data.creatinine) + '、BUN ' + getDisplayValue('bun', data.bun) + '、Albumin ' + getDisplayValue('albumin', data.albumin) + '、Glucose ' + getDisplayValue('glucose', data.glucose));
     if (missing.length) lines.push('缺少欄位：' + missing.join('、'));
