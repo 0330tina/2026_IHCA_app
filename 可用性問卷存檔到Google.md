@@ -85,11 +85,12 @@ function doPost(e) {
     }
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     if (sheet.getLastRow() === 0) {
-      sheet.appendRow(['時間', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']);
+      sheet.appendRow(['時間', '身分', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']);
     }
     var data = JSON.parse(e.postData.contents);
     var row = [
       data.at || new Date().toISOString(),
+      data.role || '',
       data.q1 || '', data.q2 || '', data.q3 || '', data.q4 || '', data.q5 || '', data.q6 || '',
       data.q7 || ''
     ];
@@ -102,6 +103,8 @@ function doPost(e) {
   }
 }
 ```
+
+**若你已部署過舊版（沒有「身分」欄）**：請把上述程式碼整段替換後**重新部署**，新回覆才會帶身分。試算表若已有舊資料，可手動在第二欄插入一欄、標題填「身分」，新筆資料即會寫入該欄。
 
 3. 儲存專案（可命名為「問卷寫入」）。
 4. 部署：**部署** → **新增部署** → 類型選 **網路應用程式**。

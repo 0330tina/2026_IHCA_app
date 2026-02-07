@@ -23,6 +23,15 @@
 
     <form id="usability-form" class="questionnaire-card">
       <div class="q-item">
+        <label class="q-label">填寫身分 <span class="required">*</span></label>
+        <div class="q-options" role="group" aria-label="填寫身分">
+          <label class="q-opt"><input type="radio" name="role" value="醫師"> 醫師</label>
+          <label class="q-opt"><input type="radio" name="role" value="護理師"> 護理師</label>
+          <label class="q-opt"><input type="radio" name="role" value="關懷師"> 關懷師</label>
+          <label class="q-opt"><input type="radio" name="role" value="醫檢師"> 醫檢師</label>
+        </div>
+      </div>
+      <div class="q-item">
         <label class="q-label">1. 本系統容易學習與操作。</label>
         <div class="q-options" role="group" aria-label="題目1">
           <label class="q-opt"><input type="radio" name="q1" value="1"> 1</label>
@@ -105,12 +114,18 @@
   <script>
     (function () {
       // 存檔到 Google 試算表：在試算表建立 Apps Script 並部署為網路應用程式，網址貼在下方（見 可用性問卷存檔到Google.md）。資料於後台試算表查看即可。
-      var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5cYHdj8rtUSyC-M7Fkun6BHTk4U5jyLMYBiG9_yilKmCWyJ-PcLQc4I_gt69SK3K8mg/exec';
+      var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzWogW0u9OS3aYvH6rPH-A4jbnaPTorBeQx0k-7tvDD9AMgtkPLIQfcLYMNIsXH6cNm8A/exec';
 
       var form = document.getElementById('usability-form');
       var thanks = document.getElementById('questionnaire-thanks');
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        var roleEl = form.querySelector('input[name="role"]:checked');
+        var role = roleEl ? roleEl.value : '';
+        if (!role) {
+          alert('請選擇填寫身分。');
+          return;
+        }
         var q1to6 = [];
         for (var i = 1; i <= 6; i++) {
           var r = form.querySelector('input[name="q' + i + '"]:checked');
@@ -118,6 +133,7 @@
         }
         var q7 = form.querySelector('#q7').value.trim();
         var payload = {
+          role: role,
           q1: q1to6[0], q2: q1to6[1], q3: q1to6[2], q4: q1to6[3], q5: q1to6[4], q6: q1to6[5],
           q7: q7,
           at: new Date().toISOString()
