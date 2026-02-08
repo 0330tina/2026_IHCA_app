@@ -209,23 +209,23 @@
     gender:     { unit: '',     min: null, max: null, required: false, label: '性別', options: { M: '男', F: '女', O: '其他' } },
     height:     { unit: 'cm',   min: 100,  max: 220, required: false, label: '身高' },
     weight:     { unit: 'kg',   min: 30,   max: 200, required: false, label: '體重' },
-    hr:         { unit: 'bpm',  min: 30,   max: 250, required: false, label: 'HR' },
-    sbp:        { unit: 'mmHg', min: 70,   max: 250, required: false, label: 'SBP' },
-    dbp:        { unit: 'mmHg', min: 40,   max: 150, required: false, label: 'DBP' },
-    rr:         { unit: '/min', min: 8,    max: 40,  required: false, label: 'RR' },
-    spo2:       { unit: '%',    min: 70,   max: 100, required: false, label: 'SpO2' },
-    temp:       { unit: '°C',   min: 32,   max: 42,  required: false, label: 'Temp' },
-    wbc:        { unit: '×10³/μL', min: 0.5, max: 50,  required: false, label: 'WBC' },
-    hb:         { unit: 'g/dL', min: 5,   max: 20,  required: false, label: 'Hb' },
-    platelet:   { unit: '×10³/μL', min: 20, max: 500, required: false, label: 'Platelet' },
-    creatinine: { unit: 'mg/dL', min: 0.3, max: 15,  required: false, label: 'Creatinine' },
-    bun:        { unit: 'mg/dL', min: 5,   max: 120, required: false, label: 'BUN' },
-    albumin:    { unit: 'g/dL', min: 2,   max: 5,   required: false, label: 'Albumin' },
-    glucose:    { unit: 'mg/dL', min: 40,  max: 500, required: false, label: 'Glucose' },
+    hr:         { unit: 'bpm',  min: 30,   max: 250, required: false, label: '心跳(HR)' },
+    sbp:        { unit: 'mmHg', min: 70,   max: 250, required: false, label: '收縮壓(SBP)' },
+    dbp:        { unit: 'mmHg', min: 40,   max: 150, required: false, label: '舒張壓(DBP)' },
+    rr:         { unit: '/min', min: 8,    max: 40,  required: false, label: '呼吸速率(RR)' },
+    spo2:       { unit: '%',    min: 70,   max: 100, required: false, label: '血氧(SpO2)' },
+    temp:       { unit: '°C',   min: 32,   max: 42,  required: false, label: '體溫(Temp)' },
+    wbc:        { unit: '×10³/μL', min: 0.5, max: 50,  required: false, label: '白血球(WBC)' },
+    hb:         { unit: 'g/dL', min: 5,   max: 20,  required: false, label: '血紅素(Hb)' },
+    platelet:   { unit: '×10³/μL', min: 20, max: 500, required: false, label: '血小板(Platelet)' },
+    creatinine: { unit: 'mg/dL', min: 0.3, max: 15,  required: false, label: '肌酸酐(Creatinine)' },
+    bun:        { unit: 'mg/dL', min: 5,   max: 120, required: false, label: '血中尿素氮(BUN)' },
+    albumin:    { unit: 'g/dL', min: 2,   max: 5,   required: false, label: '白蛋白(Albumin)' },
+    glucose:    { unit: 'mg/dL', min: 40,  max: 500, required: false, label: '血糖(Glucose)' },
     pleuraleffusion: { unit: '', min: null, max: null, required: false, label: '肋膜積水', options: { '0': '否', '1': '是' } },
     MI:         { unit: '', min: null, max: null, required: false, label: '心肌梗塞(MI)', options: { '0': '否', '1': '是' } },
     HF:         { unit: '', min: null, max: null, required: false, label: '心衰竭(HF)', options: { '0': '否', '1': '是' } },
-    e_GFR:      { unit: 'mL/min/1.73m²', min: 5, max: 150, required: false, label: 'e_GFR' },
+    e_GFR:      { unit: 'mL/min/1.73m²', min: 5, max: 150, required: false, label: '估計腎絲球過濾率(eGFR)' },
     potassium:  { unit: 'mEq/L', min: 2, max: 8, required: false, label: '鉀(K)' }
   };
 
@@ -486,9 +486,9 @@
     var lines = [];
     lines.push('【IHCA Day-1 入院首日風險評估】');
     lines.push('基本：年齡 ' + getDisplayValue('age', data.age) + '、性別 ' + getDisplayValue('gender', data.gender) + '、身高 ' + getDisplayValue('height', data.height) + '、體重 ' + getDisplayValue('weight', data.weight));
-    lines.push('Day-1 生命徵象：HR ' + getDisplayValue('hr', data.hr) + '、SBP ' + getDisplayValue('sbp', data.sbp) + '、DBP ' + getDisplayValue('dbp', data.dbp) + '、RR ' + getDisplayValue('rr', data.rr) + '、SpO2 ' + getDisplayValue('spo2', data.spo2) + '、Temp ' + getDisplayValue('temp', data.temp));
+    lines.push('Day-1 生命徵象：心跳 ' + getDisplayValue('hr', data.hr) + '、收縮壓 ' + getDisplayValue('sbp', data.sbp) + '、舒張壓 ' + getDisplayValue('dbp', data.dbp) + '、呼吸速率 ' + getDisplayValue('rr', data.rr) + '、血氧 ' + getDisplayValue('spo2', data.spo2) + '、體溫 ' + getDisplayValue('temp', data.temp));
     lines.push('病史：肋膜積水 ' + getDisplayValue('pleuraleffusion', data.pleuraleffusion) + '、MI ' + getDisplayValue('MI', data.MI) + '、HF ' + getDisplayValue('HF', data.HF));
-    lines.push('Day-1 檢驗：WBC ' + getDisplayValue('wbc', data.wbc) + '、Hb ' + getDisplayValue('hb', data.hb) + '、Platelet ' + getDisplayValue('platelet', data.platelet) + '、Creatinine ' + getDisplayValue('creatinine', data.creatinine) + '、BUN ' + getDisplayValue('bun', data.bun) + '、Albumin ' + getDisplayValue('albumin', data.albumin) + '、Glucose ' + getDisplayValue('glucose', data.glucose) + '、e_GFR ' + getDisplayValue('e_GFR', data.e_GFR) + '、鉀 ' + getDisplayValue('potassium', data.potassium));
+    lines.push('Day-1 檢驗：白血球 ' + getDisplayValue('wbc', data.wbc) + '、血紅素 ' + getDisplayValue('hb', data.hb) + '、血小板 ' + getDisplayValue('platelet', data.platelet) + '、肌酸酐 ' + getDisplayValue('creatinine', data.creatinine) + '、血中尿素氮 ' + getDisplayValue('bun', data.bun) + '、白蛋白 ' + getDisplayValue('albumin', data.albumin) + '、血糖 ' + getDisplayValue('glucose', data.glucose) + '、eGFR ' + getDisplayValue('e_GFR', data.e_GFR) + '、鉀 ' + getDisplayValue('potassium', data.potassium));
     if (missing.length) lines.push('缺少欄位：' + missing.join('、'));
     if (rangeWarnings.length) lines.push('超出合理範圍（已納入計算）：' + rangeWarnings.join('；'));
     lines.push('');
@@ -514,7 +514,7 @@
     var lines = [];
     lines.push('【IHCA Day-1 入院首日風險評估】');
     lines.push('基本：年齡 ' + getDisplayValue('age', data.age) + '、性別 ' + getDisplayValue('gender', data.gender) + '、身高 ' + getDisplayValue('height', data.height) + '、體重 ' + getDisplayValue('weight', data.weight));
-    lines.push('Day-1 生命徵象：HR ' + getDisplayValue('hr', data.hr) + '、SBP ' + getDisplayValue('sbp', data.sbp) + '、DBP ' + getDisplayValue('dbp', data.dbp) + '、RR ' + getDisplayValue('rr', data.rr) + '、SpO2 ' + getDisplayValue('spo2', data.spo2) + '、Temp ' + getDisplayValue('temp', data.temp));
+    lines.push('Day-1 生命徵象：心跳 ' + getDisplayValue('hr', data.hr) + '、收縮壓 ' + getDisplayValue('sbp', data.sbp) + '、舒張壓 ' + getDisplayValue('dbp', data.dbp) + '、呼吸速率 ' + getDisplayValue('rr', data.rr) + '、血氧 ' + getDisplayValue('spo2', data.spo2) + '、體溫 ' + getDisplayValue('temp', data.temp));
     lines.push('病史：肋膜積水 ' + getDisplayValue('pleuraleffusion', data.pleuraleffusion) + '、MI ' + getDisplayValue('MI', data.MI) + '、HF ' + getDisplayValue('HF', data.HF));
     lines.push('Day-1 檢驗：WBC ' + getDisplayValue('wbc', data.wbc) + '、Hb ' + getDisplayValue('hb', data.hb) + '、…、e_GFR ' + getDisplayValue('e_GFR', data.e_GFR) + '、鉀 ' + getDisplayValue('potassium', data.potassium));
     if (payload.missing.length) lines.push('缺少欄位：' + payload.missing.join('、'));
