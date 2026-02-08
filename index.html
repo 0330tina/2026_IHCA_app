@@ -30,6 +30,13 @@
       width: 100%;
       text-align: center;
     }
+    .home-hero-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      color: #6B4E5C;
+      opacity: 0.9;
+    }
     .home-title {
       font-size: clamp(1.35rem, 4vw, 1.75rem);
       font-weight: 600;
@@ -39,7 +46,19 @@
       margin: 0 0 2rem 0;
     }
     .home-btn {
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .home-btn .home-btn-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      color: currentColor;
+      opacity: 0.85;
+    }
+    .home-btn {
       width: 100%;
       max-width: 320px;
       margin: 0 auto 1rem;
@@ -87,9 +106,18 @@
       box-shadow: 0 6px 16px rgba(240, 196, 160, 0.35);
     }
     .home-sub {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
       font-size: 0.9rem;
       color: #7d6b7a;
       margin: 2rem 0 0.75rem;
+    }
+    .home-sub-icon {
+      width: 18px;
+      height: 18px;
+      color: #9B8A97;
     }
     .home-btns-row {
       display: flex;
@@ -123,14 +151,40 @@
 </head>
 <body>
   <div class="home-wrap">
+    <!-- 心臟＋心律意象：院內心因性猝死風險之醫學 icon -->
+    <svg class="home-hero-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M24 40C12 30 4 22 4 15c0-5 4-8 9-8 3.5 0 7.5 3 10 6 2.5-3 6.5-6 10-6 5 0 9 3 9 8 0 7-8 15-20 25z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+      <path d="M10 34h3l2.5-5 2.5 6 3-9 3 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
     <h1 class="home-title">院內心因性猝死風險預測平台</h1>
 
-    <a href="input.html" class="home-btn home-btn-primary">首日風險預測資料輸入</a>
+    <a href="input.html" class="home-btn home-btn-primary">
+      <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+      </svg>
+      首日風險預測資料輸入
+    </a>
 
-    <p class="home-sub">示範病房風險電子白板</p>
+    <p class="home-sub">
+      <svg class="home-sub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+      </svg>
+      示範病房風險電子白板
+    </p>
     <div class="home-btns-row">
-      <a href="whiteboard-day1.html" class="home-btn home-btn-secondary-a">住院首日</a>
-      <a href="whiteboard.html" class="home-btn home-btn-secondary-b">事前24小時</a>
+      <a href="whiteboard-day1.html" class="home-btn home-btn-secondary-a">
+        <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+        </svg>
+        住院首日
+      </a>
+      <a href="whiteboard.html" class="home-btn home-btn-secondary-b">
+        <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+        </svg>
+        事前24小時
+      </a>
     </div>
 
     <p class="home-note">示範介面｜資料僅供展示</p>
