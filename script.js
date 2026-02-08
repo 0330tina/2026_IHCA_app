@@ -516,7 +516,7 @@
     lines.push('基本：年齡 ' + getDisplayValue('age', data.age) + '、性別 ' + getDisplayValue('gender', data.gender) + '、身高 ' + getDisplayValue('height', data.height) + '、體重 ' + getDisplayValue('weight', data.weight));
     lines.push('Day-1 生命徵象：心跳 ' + getDisplayValue('hr', data.hr) + '、收縮壓 ' + getDisplayValue('sbp', data.sbp) + '、舒張壓 ' + getDisplayValue('dbp', data.dbp) + '、呼吸速率 ' + getDisplayValue('rr', data.rr) + '、血氧 ' + getDisplayValue('spo2', data.spo2) + '、體溫 ' + getDisplayValue('temp', data.temp));
     lines.push('病史：肋膜積水 ' + getDisplayValue('pleuraleffusion', data.pleuraleffusion) + '、MI ' + getDisplayValue('MI', data.MI) + '、HF ' + getDisplayValue('HF', data.HF));
-    lines.push('Day-1 檢驗：WBC ' + getDisplayValue('wbc', data.wbc) + '、Hb ' + getDisplayValue('hb', data.hb) + '、…、e_GFR ' + getDisplayValue('e_GFR', data.e_GFR) + '、鉀 ' + getDisplayValue('potassium', data.potassium));
+    lines.push('Day-1 檢驗：白血球 ' + getDisplayValue('wbc', data.wbc) + '、血紅素 ' + getDisplayValue('hb', data.hb) + '、…、eGFR ' + getDisplayValue('e_GFR', data.e_GFR) + '、鉀 ' + getDisplayValue('potassium', data.potassium));
     if (payload.missing.length) lines.push('缺少欄位：' + payload.missing.join('、'));
     if (payload.rangeWarnings.length) lines.push('超出合理範圍（已納入計算）：' + payload.rangeWarnings.join('；'));
     lines.push('');
