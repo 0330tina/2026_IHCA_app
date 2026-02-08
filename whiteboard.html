@@ -13,7 +13,7 @@
       background: linear-gradient(135deg, #b8e0d2 0%, #a8d5c8 50%, #95c9bc 100%);
       color: #2d6a4f;
       padding: 0.75rem 1.5rem;
-      padding-right: 6rem;
+      padding-right: 10rem;
       text-align: center;
       font-size: clamp(1rem, 2.5vw, 1.5rem);
       font-weight: 600;
@@ -78,16 +78,29 @@
       .whiteboard-summary-pct  { font-size: 0.85rem; margin-top: 0; }
     }
     .whiteboard-main {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.75rem;
-      padding: 0 1rem 1rem;
       max-width: 1400px;
       margin: 0 auto;
-      align-items: stretch;
+      padding: 0 1rem 1rem;
     }
-    @media (max-width: 900px)  { .whiteboard-main { grid-template-columns: repeat(3, 1fr); gap: 0.6rem; } }
-    @media (max-width: 500px)  { .whiteboard-main { grid-template-columns: repeat(2, 1fr); gap: 0.45rem; padding: 0 0.75rem 0.75rem; } }
+    .whiteboard-section {
+      margin-bottom: 1.25rem;
+    }
+    .whiteboard-section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      padding: 0.35rem 0;
+      border-bottom: 2px solid rgba(0,0,0,0.08);
+    }
+    .whiteboard-section-title.level-high { color: #9d4b5a; }
+    .whiteboard-section-title.level-mid { color: #8b6914; }
+    .whiteboard-section-title.level-low { color: #2d6a4f; }
+    .whiteboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.75rem;
+    }
+    @media (max-width: 500px) { .whiteboard-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; } }
     .whiteboard-card {
       border-radius: 12px;
       padding: 0.7rem;
@@ -111,7 +124,21 @@
     .whiteboard-card-num { font-size: 0.75rem; opacity: 0.85; margin-bottom: 0.2rem; }
     .whiteboard-card-prob { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; margin: 0.2rem 0; letter-spacing: 0.02em; }
     .whiteboard-card-level { font-size: 0.85rem; font-weight: 600; }
-    .whiteboard-card-demo { font-size: 0.7rem; opacity: 0.9; margin-top: 0.4rem; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; }
+    .whiteboard-card-demo { font-size: 0.7rem; opacity: 0.9; margin-top: 0.35rem; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; }
+    .whiteboard-card-bed { font-size: 0.8rem; opacity: 0.9; margin-top: 0.15rem; }
+    .whiteboard-header-actions { position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); display: flex; gap: 0.5rem; align-items: center; }
+    .whiteboard-btn-refresh {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #2d6a4f;
+      background: rgba(255,255,255,0.95);
+      border: 2px solid rgba(45, 106, 79, 0.4);
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .whiteboard-btn-refresh:hover { background: #fff; border-color: #2d6a4f; }
     .whiteboard-footer {
       text-align: center;
       padding: 0.5rem 1rem;
@@ -124,9 +151,12 @@
 </head>
 <body class="whiteboard-page">
   <header class="whiteboard-header">
-    <a href="index.html" class="whiteboard-header-btn">回主頁</a>
-    IHCA Day-1 入院首日風險板
-    <small>電子白板示範 — 15 位病人 · 病房各風險百分比</small>
+    <div class="whiteboard-header-actions">
+      <button type="button" class="whiteboard-btn-refresh" id="btn-refresh" aria-label="重新產生示範資料">重新產生</button>
+      <a href="index.html" class="whiteboard-header-btn">回主頁</a>
+    </div>
+    IHCA 24 小時前風險電子白板
+    <small id="whiteboard-subtitle">電子白板示範 — 依風險分級顯示</small>
   </header>
 
   <section class="whiteboard-summary" id="whiteboard-summary" aria-label="病房風險分布">
@@ -147,8 +177,8 @@
     </div>
   </section>
 
-  <main class="whiteboard-main" id="whiteboard-main" aria-label="15 位病人風險">
-    <!-- 15 張病人卡由 JS 產生 -->
+  <main class="whiteboard-main" id="whiteboard-main" aria-label="病人風險白板">
+    <!-- High / Medium / Low 三區塊由 JS 產生 -->
   </main>
 
   <footer class="whiteboard-footer">
@@ -156,123 +186,67 @@
     <a href="index.html" class="whiteboard-link">回主頁輸入</a>
   </footer>
 
-  <script src="riskCalc.js"></script>
+  <script src="whiteboardDataGenerator.js"></script>
   <script>
     (function () {
-      // 15 人：低風險 8、中度 4、高風險 3（高少低多）
-      var DEMO_LOW = {
-        age: 42, gender: 'M', height: 172, weight: 68, hr: 72, sbp: 118, dbp: 74, rr: 16, spo2: 98, temp: 36.5,
-        wbc: 7.2, hb: 14, platelet: 220, creatinine: 0.9, bun: 12, albumin: 4.2, glucose: 92,
-        pleuraleffusion: '0', MI: '0', HF: '0', e_GFR: 95, potassium: 4.0
-      };
-      var DEMO_MID = {
-        age: 68, gender: 'F', height: 158, weight: 62, hr: 96, sbp: 102, dbp: 64, rr: 20, spo2: 94, temp: 37.2,
-        wbc: 11, hb: 10.2, platelet: 152, creatinine: 1.6, bun: 26, albumin: 3.1, glucose: 128,
-        pleuraleffusion: '0', MI: '0', HF: '1', e_GFR: 52, potassium: 4.3
-      };
-      var DEMO_HIGH = {
-        age: 78, gender: 'M', height: 168, weight: 72, hr: 105, sbp: 88, dbp: 55, rr: 22, spo2: 91, temp: 37.8,
-        wbc: 14.2, hb: 9.5, platelet: 85, creatinine: 2.4, bun: 38, albumin: 2.8, glucose: 165,
-        pleuraleffusion: '0', MI: '0', HF: '1', e_GFR: 45, potassium: 4.2
-      };
+      var levelToClass = { High: 'high', Medium: 'mid', Low: 'low' };
+      var levelToLabel = { High: '高風險', Medium: '中度風險', Low: '低風險' };
 
-      function clone(o, overrides) {
-        var c = {};
-        for (var k in o) c[k] = o[k];
-        for (var k in overrides) c[k] = overrides[k];
-        return c;
+      function renderWhiteboard(list) {
+        if (!list || !list.length) return;
+        var total = list.length;
+        var high = list.filter(function (p) { return p.risk_level === 'High'; });
+        var mid = list.filter(function (p) { return p.risk_level === 'Medium'; });
+        var low = list.filter(function (p) { return p.risk_level === 'Low'; });
+
+        document.getElementById('summary-high-count').textContent = high.length + ' 人';
+        document.getElementById('summary-high-pct').textContent = (total ? (high.length / total * 100).toFixed(1) : '0') + ' %';
+        document.getElementById('summary-mid-count').textContent = mid.length + ' 人';
+        document.getElementById('summary-mid-pct').textContent = (total ? (mid.length / total * 100).toFixed(1) : '0') + ' %';
+        document.getElementById('summary-low-count').textContent = low.length + ' 人';
+        document.getElementById('summary-low-pct').textContent = (total ? (low.length / total * 100).toFixed(1) : '0') + ' %';
+
+        var subtitle = document.getElementById('whiteboard-subtitle');
+        if (subtitle) subtitle.textContent = '電子白板示範 — ' + total + ' 位病人 · 每次重新產生皆不同';
+
+        var main = document.getElementById('whiteboard-main');
+        main.innerHTML = '';
+
+        [high, mid, low].forEach(function (group) {
+          if (group.length === 0) return;
+          var level = group[0].risk_level;
+          var section = document.createElement('div');
+          section.className = 'whiteboard-section';
+          section.setAttribute('aria-label', levelToLabel[level] + '區');
+          section.innerHTML = '<h2 class="whiteboard-section-title level-' + levelToClass[level] + '">' + levelToLabel[level] + '（' + group.length + ' 人）</h2><div class="whiteboard-grid" id="grid-' + level + '"></div>';
+          main.appendChild(section);
+          var grid = document.getElementById('grid-' + level);
+          group.forEach(function (p) {
+            var card = document.createElement('div');
+            card.className = 'whiteboard-card level-' + levelToClass[level];
+            card.setAttribute('aria-label', p.patient_id + ' ' + p.bed + ' 風險 ' + p.risk_score);
+            card.innerHTML =
+              '<div class="whiteboard-card-num">' + p.patient_id + '</div>' +
+              '<div class="whiteboard-card-bed">' + p.bed + '</div>' +
+              '<div class="whiteboard-card-prob">' + p.risk_score + '</div>' +
+              '<div class="whiteboard-card-level">' + levelToLabel[level] + '</div>' +
+              '<div class="whiteboard-card-demo">' + (p.key_drivers || '—').replace(/、/g, ' · ') + '</div>';
+            grid.appendChild(card);
+          });
+        });
       }
 
-      // 8 低、4 中、3 高（略調參數以區分不同病人，仍維持同級）
-      var PATIENTS = [
-        clone(DEMO_LOW, { age: 38, sbp: 122, hb: 14.2 }),
-        clone(DEMO_LOW, { age: 45, gender: 'F', sbp: 116, spo2: 99 }),
-        clone(DEMO_LOW, { age: 50, hr: 68, e_GFR: 88 }),
-        clone(DEMO_LOW, { age: 44, sbp: 124, glucose: 88 }),
-        clone(DEMO_LOW, { age: 48, gender: 'F', hb: 13.5, temp: 36.4 }),
-        clone(DEMO_LOW, { age: 41, sbp: 120, e_GFR: 92 }),
-        clone(DEMO_LOW, { age: 52, hr: 75, albumin: 4.0 }),
-        clone(DEMO_LOW, { age: 46, sbp: 118, potassium: 3.9 }),
-        clone(DEMO_MID, { age: 65, sbp: 105, e_GFR: 48 }),
-        clone(DEMO_MID, { age: 70, gender: 'M', hr: 92, spo2: 95 }),
-        clone(DEMO_MID, { age: 72, sbp: 100, hb: 9.8 }),
-        clone(DEMO_MID, { age: 66, gender: 'F', temp: 37.0, e_GFR: 55 }),
-        clone(DEMO_HIGH, { age: 76, sbp: 90, e_GFR: 42 }),
-        clone(DEMO_HIGH, { age: 80, gender: 'F', hr: 108, spo2: 90 }),
-        clone(DEMO_HIGH, { age: 75, sbp: 86, hb: 9.2 })
-      ];
-
-      function buildInput(demo) {
-        var p = demo.pleuraleffusion, mi = demo.MI, hf = demo.HF;
-        return {
-          Temp__01_1: demo.temp,
-          Sp_01_1: demo.sbp,
-          Dp_01_1: demo.dbp,
-          Spo2_01_1: demo.spo2,
-          Age_per_10_year: demo.age / 10,
-          Sex: demo.gender === 'M' ? 1 : 0,
-          pleuraleffusion: (p !== undefined && p !== '') ? Number(p) : 0,
-          MI: (mi !== undefined && mi !== '') ? Number(mi) : 0,
-          HF: (hf !== undefined && hf !== '') ? Number(hf) : 0,
-          Albumin: demo.albumin,
-          GlucoseAC: demo.glucose,
-          Hemoglobin: demo.hb,
-          WBC: demo.wbc,
-          e_GFR: demo.e_GFR,
-          Potassium: demo.potassium
-        };
+      function run() {
+        if (typeof WhiteboardDataGenerator === 'undefined') {
+          document.getElementById('whiteboard-main').innerHTML = '<p style="text-align:center;color:#6b7280;padding:2rem;">請確認 whiteboardDataGenerator.js 已載入。</p>';
+          return;
+        }
+        var list = WhiteboardDataGenerator.generate();
+        renderWhiteboard(list);
       }
 
-      function shortLine(demo) {
-        return demo.age + '歲' + (demo.gender === 'M' ? '男' : '女') + ' SBP ' + demo.sbp + ' SpO₂ ' + demo.spo2 + ' eGFR ' + demo.e_GFR;
-      }
-
-      var levelToClass = { Low: 'low', Moderate: 'mid', High: 'high' };
-      var levelToLabel = { Low: '低風險', Moderate: '中度風險', High: '高風險' };
-
-      var results = [];
-      var container = document.getElementById('whiteboard-main');
-      container.innerHTML = '';
-
-      if (typeof IHCARiskCalc === 'undefined') {
-        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#6b7280;">請確認 riskCalc.js 已載入。</p>';
-        return;
-      }
-
-      for (var i = 0; i < PATIENTS.length; i++) {
-        var demo = PATIENTS[i];
-        var input = buildInput(demo);
-        var result = IHCARiskCalc.calculate(input);
-        results.push({ level: result.risk_level, pct: result.probability * 100 });
-        var id = levelToClass[result.risk_level];
-        var card = document.createElement('div');
-        card.className = 'whiteboard-card level-' + id;
-        card.setAttribute('aria-label', '病人 ' + (i + 1) + ' ' + levelToLabel[result.risk_level]);
-        card.innerHTML =
-          '<div class="whiteboard-card-num">#' + (i + 1) + '</div>' +
-          '<div class="whiteboard-card-prob">' + (result.probability * 100).toFixed(1) + ' %</div>' +
-          '<div class="whiteboard-card-level">' + levelToLabel[result.risk_level] + '</div>' +
-          '<div class="whiteboard-card-demo">' + shortLine(demo) + '</div>';
-        container.appendChild(card);
-      }
-
-      var countLow = 0, countMid = 0, countHigh = 0;
-      results.forEach(function (r) {
-        if (r.level === 'Low') countLow++;
-        else if (r.level === 'Moderate') countMid++;
-        else countHigh++;
-      });
-      var total = results.length;
-      var pctLow = total ? (countLow / total * 100).toFixed(1) : '0';
-      var pctMid = total ? (countMid / total * 100).toFixed(1) : '0';
-      var pctHigh = total ? (countHigh / total * 100).toFixed(1) : '0';
-
-      document.getElementById('summary-low-count').textContent = countLow + ' 人';
-      document.getElementById('summary-low-pct').textContent = pctLow + ' %';
-      document.getElementById('summary-mid-count').textContent = countMid + ' 人';
-      document.getElementById('summary-mid-pct').textContent = pctMid + ' %';
-      document.getElementById('summary-high-count').textContent = countHigh + ' 人';
-      document.getElementById('summary-high-pct').textContent = pctHigh + ' %';
+      run();
+      document.getElementById('btn-refresh').addEventListener('click', run);
     })();
   </script>
 </body>

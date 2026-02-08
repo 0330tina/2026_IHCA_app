@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#b8e0d2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>IHCA 入院首日風險板 | 電子白板</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .whiteboard-page { background: #f5f0f9; min-height: 100vh; color: #4a4458; }
+    .whiteboard-header {
+      background: linear-gradient(135deg, #b8e0d2 0%, #a8d5c8 50%, #95c9bc 100%);
+      color: #2d6a4f;
+      padding: 0.75rem 1.5rem;
+      padding-right: 6rem;
+      text-align: center;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      font-weight: 600;
+      box-shadow: 0 2px 12px rgba(45, 106, 79, 0.15);
+      position: relative;
+    }
+    .whiteboard-header small { display: block; font-size: 0.65em; font-weight: 400; opacity: 0.9; margin-top: 0.2rem; color: #3d7a63; }
+    .whiteboard-header-btn {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #2d6a4f;
+      background: rgba(255,255,255,0.9);
+      border: 2px solid rgba(45, 106, 79, 0.4);
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .whiteboard-header-btn:hover { background: #fff; border-color: #2d6a4f; color: #1e4d3d; }
+    .whiteboard-summary {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.6rem 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      text-align: center;
+    }
+    @media (max-width: 600px) { .whiteboard-summary { grid-template-columns: 1fr; } }
+    .whiteboard-summary-card {
+      border-radius: 12px;
+      padding: 0.6rem 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 2px solid rgba(255,255,255,0.8);
+    }
+    .whiteboard-summary-card.level-low   { background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%); color: #2d6a4f; }
+    .whiteboard-summary-card.level-mid   { background: linear-gradient(160deg, #fff4d6 0%, #ffe4b8 100%); color: #8b6914; }
+    .whiteboard-summary-card.level-high  { background: linear-gradient(160deg, #ffd6e0 0%, #ffc9d4 100%); color: #9d4b5a; }
+    .whiteboard-summary-label { font-size: 0.9rem; margin-bottom: 0.15rem; }
+    .whiteboard-summary-count { font-size: 1.4rem; }
+    .whiteboard-summary-pct  { font-size: 1rem; opacity: 0.95; margin-top: 0.1rem; }
+    .whiteboard-main {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      padding: 0 1rem 1rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px)  { .whiteboard-main { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 500px)  { .whiteboard-main { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; } }
+    .whiteboard-card {
+      border-radius: 12px;
+      padding: 0.7rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 120px;
+      border: 2px solid rgba(255,255,255,0.8);
+    }
+    .whiteboard-card.level-low   { background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%); color: #2d6a4f; }
+    .whiteboard-card.level-mid   { background: linear-gradient(160deg, #fff4d6 0%, #ffe4b8 100%); color: #8b6914; }
+    .whiteboard-card.level-high  { background: linear-gradient(160deg, #ffd6e0 0%, #ffc9d4 100%); color: #9d4b5a; }
+    .whiteboard-card-num { font-size: 0.75rem; opacity: 0.85; margin-bottom: 0.2rem; }
+    .whiteboard-card-prob { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 800; margin: 0.2rem 0; }
+    .whiteboard-card-level { font-size: 0.85rem; font-weight: 600; }
+    .whiteboard-card-demo { font-size: 0.7rem; opacity: 0.9; margin-top: 0.4rem; line-height: 1.3; }
+    .whiteboard-footer { text-align: center; padding: 0.5rem 1rem; font-size: 0.75rem; color: #8b7a9e; }
+    .whiteboard-link { color: #7c6b9a; text-decoration: none; margin-left: 0.5rem; }
+    .whiteboard-link:hover { text-decoration: underline; color: #5a4a78; }
+  </style>
+</head>
+<body class="whiteboard-page">
+  <header class="whiteboard-header">
+    <a href="index.html" class="whiteboard-header-btn">回主頁</a>
+    IHCA 入院首日風險板
+    <small>電子白板示範 — 15 位病人 · Day-1 生命徵象與檢驗</small>
+  </header>
+
+  <section class="whiteboard-summary" id="whiteboard-summary" aria-label="病房風險分布">
+    <div class="whiteboard-summary-card level-low">
+      <div class="whiteboard-summary-label">低風險</div>
+      <div class="whiteboard-summary-count" id="summary-low-count">0 人</div>
+      <div class="whiteboard-summary-pct" id="summary-low-pct">0 %</div>
+    </div>
+    <div class="whiteboard-summary-card level-mid">
+      <div class="whiteboard-summary-label">中度風險</div>
+      <div class="whiteboard-summary-count" id="summary-mid-count">0 人</div>
+      <div class="whiteboard-summary-pct" id="summary-mid-pct">0 %</div>
+    </div>
+    <div class="whiteboard-summary-card level-high">
+      <div class="whiteboard-summary-label">高風險</div>
+      <div class="whiteboard-summary-count" id="summary-high-count">0 人</div>
+      <div class="whiteboard-summary-pct" id="summary-high-pct">0 %</div>
+    </div>
+  </section>
+
+  <main class="whiteboard-main" id="whiteboard-main" aria-label="15 位病人風險"></main>
+
+  <footer class="whiteboard-footer">
+    本畫面為入院首日邏輯式回歸模型之預測示範，僅供臨床決策輔助參考。
+    <a href="index.html" class="whiteboard-link">回主頁輸入</a>
+  </footer>
+
+  <script src="riskCalc.js"></script>
+  <script>
+    (function () {
+      var DEMO_LOW = {
+        age: 42, gender: 'M', height: 172, weight: 68, hr: 72, sbp: 118, dbp: 74, rr: 16, spo2: 98, temp: 36.5,
+        wbc: 7.2, hb: 14, platelet: 220, creatinine: 0.9, bun: 12, albumin: 4.2, glucose: 92,
+        pleuraleffusion: '0', MI: '0', HF: '0', e_GFR: 95, potassium: 4.0
+      };
+      var DEMO_MID = {
+        age: 68, gender: 'F', height: 158, weight: 62, hr: 96, sbp: 102, dbp: 64, rr: 20, spo2: 94, temp: 37.2,
+        wbc: 11, hb: 10.2, platelet: 152, creatinine: 1.6, bun: 26, albumin: 3.1, glucose: 128,
+        pleuraleffusion: '0', MI: '0', HF: '1', e_GFR: 52, potassium: 4.3
+      };
+      var DEMO_HIGH = {
+        age: 78, gender: 'M', height: 168, weight: 72, hr: 105, sbp: 88, dbp: 55, rr: 22, spo2: 91, temp: 37.8,
+        wbc: 14.2, hb: 9.5, platelet: 85, creatinine: 2.4, bun: 38, albumin: 2.8, glucose: 165,
+        pleuraleffusion: '0', MI: '0', HF: '1', e_GFR: 45, potassium: 4.2
+      };
+      function clone(o, overrides) {
+        var c = {};
+        for (var k in o) c[k] = o[k];
+        for (var k in overrides) c[k] = overrides[k];
+        return c;
+      }
+      var PATIENTS = [
+        clone(DEMO_LOW, { age: 38, sbp: 122, hb: 14.2 }),
+        clone(DEMO_LOW, { age: 45, gender: 'F', sbp: 116, spo2: 99 }),
+        clone(DEMO_LOW, { age: 50, hr: 68, e_GFR: 88 }),
+        clone(DEMO_LOW, { age: 44, sbp: 124, glucose: 88 }),
+        clone(DEMO_LOW, { age: 48, gender: 'F', hb: 13.5, temp: 36.4 }),
+        clone(DEMO_LOW, { age: 41, sbp: 120, e_GFR: 92 }),
+        clone(DEMO_LOW, { age: 52, hr: 75, albumin: 4.0 }),
+        clone(DEMO_LOW, { age: 46, sbp: 118, potassium: 3.9 }),
+        clone(DEMO_MID, { age: 65, sbp: 105, e_GFR: 48 }),
+        clone(DEMO_MID, { age: 70, gender: 'M', hr: 92, spo2: 95 }),
+        clone(DEMO_MID, { age: 72, sbp: 100, hb: 9.8 }),
+        clone(DEMO_MID, { age: 66, gender: 'F', temp: 37.0, e_GFR: 55 }),
+        clone(DEMO_HIGH, { age: 76, sbp: 90, e_GFR: 42 }),
+        clone(DEMO_HIGH, { age: 80, gender: 'F', hr: 108, spo2: 90 }),
+        clone(DEMO_HIGH, { age: 75, sbp: 86, hb: 9.2 })
+      ];
+      function buildInput(demo) {
+        var p = demo.pleuraleffusion, mi = demo.MI, hf = demo.HF;
+        return {
+          Temp__01_1: demo.temp,
+          Sp_01_1: demo.sbp,
+          Dp_01_1: demo.dbp,
+          Spo2_01_1: demo.spo2,
+          Age_per_10_year: demo.age / 10,
+          Sex: demo.gender === 'M' ? 1 : 0,
+          pleuraleffusion: (p !== undefined && p !== '') ? Number(p) : 0,
+          MI: (mi !== undefined && mi !== '') ? Number(mi) : 0,
+          HF: (hf !== undefined && hf !== '') ? Number(hf) : 0,
+          Albumin: demo.albumin,
+          GlucoseAC: demo.glucose,
+          Hemoglobin: demo.hb,
+          WBC: demo.wbc,
+          e_GFR: demo.e_GFR,
+          Potassium: demo.potassium
+        };
+      }
+      function shortLine(demo) {
+        return demo.age + '歲' + (demo.gender === 'M' ? '男' : '女') + ' SBP ' + demo.sbp + ' SpO₂ ' + demo.spo2 + ' eGFR ' + demo.e_GFR;
+      }
+      var levelToClass = { Low: 'low', Moderate: 'mid', High: 'high' };
+      var levelToLabel = { Low: '低風險', Moderate: '中度風險', High: '高風險' };
+
+      var container = document.getElementById('whiteboard-main');
+      container.innerHTML = '';
+      if (typeof IHCARiskCalc === 'undefined') {
+        container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#6b7280;">請確認 riskCalc.js 已載入。</p>';
+        return;
+      }
+      var countLow = 0, countMid = 0, countHigh = 0;
+      for (var i = 0; i < PATIENTS.length; i++) {
+        var demo = PATIENTS[i];
+        var input = buildInput(demo);
+        var result = IHCARiskCalc.calculate(input);
+        if (result.risk_level === 'Low') countLow++;
+        else if (result.risk_level === 'Moderate') countMid++;
+        else countHigh++;
+        var id = levelToClass[result.risk_level];
+        var card = document.createElement('div');
+        card.className = 'whiteboard-card level-' + id;
+        card.setAttribute('aria-label', '病人 ' + (i + 1) + ' ' + levelToLabel[result.risk_level]);
+        card.innerHTML =
+          '<div class="whiteboard-card-num">#' + (i + 1) + '</div>' +
+          '<div class="whiteboard-card-prob">' + (result.probability * 100).toFixed(1) + ' %</div>' +
+          '<div class="whiteboard-card-level">' + levelToLabel[result.risk_level] + '</div>' +
+          '<div class="whiteboard-card-demo">' + shortLine(demo) + '</div>';
+        container.appendChild(card);
+      }
+      var total = PATIENTS.length;
+      document.getElementById('summary-low-count').textContent = countLow + ' 人';
+      document.getElementById('summary-low-pct').textContent = (total ? (countLow / total * 100).toFixed(1) : '0') + ' %';
+      document.getElementById('summary-mid-count').textContent = countMid + ' 人';
+      document.getElementById('summary-mid-pct').textContent = (total ? (countMid / total * 100).toFixed(1) : '0') + ' %';
+      document.getElementById('summary-high-count').textContent = countHigh + ' 人';
+      document.getElementById('summary-high-pct').textContent = (total ? (countHigh / total * 100).toFixed(1) : '0') + ' %';
+    })();
+  </script>
+</body>
+</html>
