@@ -78,29 +78,16 @@
       .whiteboard-summary-pct  { font-size: 0.85rem; margin-top: 0; }
     }
     .whiteboard-main {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      padding: 0 1rem 1rem;
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 1rem 1rem;
+      align-items: stretch;
     }
-    .whiteboard-section {
-      margin-bottom: 1.25rem;
-    }
-    .whiteboard-section-title {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      padding: 0.35rem 0;
-      border-bottom: 2px solid rgba(0,0,0,0.08);
-    }
-    .whiteboard-section-title.level-high { color: #9d4b5a; }
-    .whiteboard-section-title.level-mid { color: #8b6914; }
-    .whiteboard-section-title.level-low { color: #2d6a4f; }
-    .whiteboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 0.75rem;
-    }
-    @media (max-width: 500px) { .whiteboard-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; } }
+    @media (max-width: 900px)  { .whiteboard-main { grid-template-columns: repeat(3, 1fr); gap: 0.6rem; } }
+    @media (max-width: 500px)  { .whiteboard-main { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; padding: 0 0.75rem 0.75rem; } }
     .whiteboard-card {
       border-radius: 12px;
       padding: 0.7rem;
@@ -117,6 +104,7 @@
       .whiteboard-card-prob { font-size: 1.1rem; }
       .whiteboard-card-level { font-size: 0.75rem; }
       .whiteboard-card-demo { font-size: 0.65rem; margin-top: 0.25rem; }
+      .whiteboard-card-bed { font-size: 0.75rem; }
     }
     .whiteboard-card.level-low   { background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%); color: #2d6a4f; }
     .whiteboard-card.level-mid   { background: linear-gradient(160deg, #fff4d6 0%, #ffe4b8 100%); color: #8b6914; }
@@ -178,7 +166,7 @@
   </section>
 
   <main class="whiteboard-main" id="whiteboard-main" aria-label="病人風險白板">
-    <!-- High / Medium / Low 三區塊由 JS 產生 -->
+    <!-- 卡片由 JS 產生，排列與首日白板相同 -->
   </main>
 
   <footer class="whiteboard-footer">
@@ -207,32 +195,23 @@
         document.getElementById('summary-low-pct').textContent = (total ? (low.length / total * 100).toFixed(1) : '0') + ' %';
 
         var subtitle = document.getElementById('whiteboard-subtitle');
-        if (subtitle) subtitle.textContent = '電子白板示範 — ' + total + ' 位病人 · 每次重新產生皆不同';
+        if (subtitle) subtitle.textContent = '電子白板示範 — ' + total + ' 位病人 · 每 5 秒自動更新（模擬不同時間風險變化）';
 
         var main = document.getElementById('whiteboard-main');
         main.innerHTML = '';
 
-        [high, mid, low].forEach(function (group) {
-          if (group.length === 0) return;
-          var level = group[0].risk_level;
-          var section = document.createElement('div');
-          section.className = 'whiteboard-section';
-          section.setAttribute('aria-label', levelToLabel[level] + '區');
-          section.innerHTML = '<h2 class="whiteboard-section-title level-' + levelToClass[level] + '">' + levelToLabel[level] + '（' + group.length + ' 人）</h2><div class="whiteboard-grid" id="grid-' + level + '"></div>';
-          main.appendChild(section);
-          var grid = document.getElementById('grid-' + level);
-          group.forEach(function (p) {
-            var card = document.createElement('div');
-            card.className = 'whiteboard-card level-' + levelToClass[level];
-            card.setAttribute('aria-label', p.patient_id + ' ' + p.bed + ' 風險 ' + p.risk_score);
-            card.innerHTML =
-              '<div class="whiteboard-card-num">' + p.patient_id + '</div>' +
-              '<div class="whiteboard-card-bed">' + p.bed + '</div>' +
-              '<div class="whiteboard-card-prob">' + p.risk_score + '</div>' +
-              '<div class="whiteboard-card-level">' + levelToLabel[level] + '</div>' +
-              '<div class="whiteboard-card-demo">' + (p.key_drivers || '—').replace(/、/g, ' · ') + '</div>';
-            grid.appendChild(card);
-          });
+        list.forEach(function (p) {
+          var level = p.risk_level;
+          var card = document.createElement('div');
+          card.className = 'whiteboard-card level-' + levelToClass[level];
+          card.setAttribute('aria-label', p.patient_id + ' ' + p.bed + ' 風險 ' + p.risk_score);
+          card.innerHTML =
+            '<div class="whiteboard-card-num">' + p.patient_id + '</div>' +
+            '<div class="whiteboard-card-bed">' + p.bed + '</div>' +
+            '<div class="whiteboard-card-prob">' + p.risk_score + '</div>' +
+            '<div class="whiteboard-card-level">' + levelToLabel[level] + '</div>' +
+            '<div class="whiteboard-card-demo">' + (p.key_drivers || '—').replace(/、/g, ' · ') + '</div>';
+          main.appendChild(card);
         });
       }
 
@@ -247,6 +226,7 @@
 
       run();
       document.getElementById('btn-refresh').addEventListener('click', run);
+      setInterval(run, 5000);
     })();
   </script>
 </body>

@@ -135,11 +135,11 @@
     return 'Low';
   }
 
-  /** 依目標等級產生一筆合理數值，再微調使 score 落在該等級 */
+  /** 依目標等級產生一筆合理數值，再微調使 score 落在該等級。bed 於 generateWhiteboardData 依床號重排時統一指派。 */
   function generateOne(targetLevel, index) {
     var rec = {};
     rec.patient_id = 'P' + (String(index + 1).length >= 3 ? String(index + 1) : ('00' + (index + 1)).slice(-3));
-    rec.bed = randomInt(1, 12) + ['A', 'B', 'C', 'D', 'E'][randomInt(0, 4)] + '-' + randomInt(1, 30);
+    rec.bed = ''; /* 同病房，稍後依床號 8A-1, 8A-2, ... 隨機指派後排序 */
     rec.sex = randomBool(0.55) ? 'M' : 'F';
     rec.age = randomInt(RANGES.age[0], RANGES.age[1]);
     rec.pleural_effusion = randomZeroOne(0.12);
@@ -253,9 +253,29 @@
     return drivers.slice(0, 3).join('、');
   }
 
+  /** Fisher–Yates  shuffle */
+  function shuffleArray(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = randomInt(0, i);
+      var t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
+    return a;
+  }
+
+  /** 解析床號 "8A-12" 為 [ "8A", 12 ] 供排序 */
+  function parseBed(bedStr) {
+    var parts = (bedStr || '').split('-');
+    var room = parts[0] || '';
+    var num = parseInt(parts[1], 10);
+    return { room: room, num: isNaN(num) ? 0 : num };
+  }
+
   /**
-   * 產生一組示範白板資料。
-   * @returns {Array} 依 risk_score 由高到低排序的病人陣列
+   * 產生一組示範白板資料。同病房，依床號排序，風險穿插。
+   * @returns {Array} 依床號排序的病人陣列（風險高/中/低穿插）
    */
   function generateWhiteboardData() {
     var n = randomInt(15, 20);
@@ -273,10 +293,24 @@
     for (var m = 0; m < nMedium; m++) list.push(generateOne('Medium', i++));
     for (var l = 0; l < nLow; l++) list.push(generateOne('Low', i++));
 
-    list.sort(function (a, b) { return b.risk_score - a.risk_score; });
+    var roomLabel = '8A';
+    var bedNumbers = shuffleArray(
+      Array.from({ length: n }, function (_, idx) { return idx + 1; })
+    );
     list.forEach(function (p, idx) {
-      var n = idx + 1;
-      p.patient_id = 'P' + (n >= 100 ? n : n >= 10 ? '0' + n : '00' + n);
+      p.bed = roomLabel + '-' + bedNumbers[idx];
+    });
+
+    list.sort(function (a, b) {
+      var pa = parseBed(a.bed);
+      var pb = parseBed(b.bed);
+      if (pa.room !== pb.room) return pa.room.localeCompare(pb.room);
+      return pa.num - pb.num;
+    });
+
+    list.forEach(function (p, idx) {
+      var num = idx + 1;
+      p.patient_id = 'P' + (num >= 100 ? num : num >= 10 ? '0' + num : '00' + num);
     });
     return list;
   }
