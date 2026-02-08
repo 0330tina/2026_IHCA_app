@@ -279,34 +279,45 @@
    */
   function generateWhiteboardData() {
     var n = randomInt(15, 20);
-    var nHigh = 2;
+    var maxHigh = Math.floor(n * 0.30);
+    var nHigh = Math.min(2, maxHigh);
     var nMedium = 4;
     var nLow = n - nHigh - nMedium;
     if (nLow < 0) {
-      nMedium = Math.max(4, n - 2);
+      nMedium = Math.max(4, n - nHigh);
       nLow = n - nHigh - nMedium;
     }
 
-    var list = [];
+    var listHigh = [], listMedium = [], listLow = [];
     var i = 0;
-    for (var h = 0; h < nHigh; h++) list.push(generateOne('High', i++));
-    for (var m = 0; m < nMedium; m++) list.push(generateOne('Medium', i++));
-    for (var l = 0; l < nLow; l++) list.push(generateOne('Low', i++));
+    for (var h = 0; h < nHigh; h++) listHigh.push(generateOne('High', i++));
+    for (var m = 0; m < nMedium; m++) listMedium.push(generateOne('Medium', i++));
+    for (var l = 0; l < nLow; l++) listLow.push(generateOne('Low', i++));
 
     var roomLabel = '8A';
-    var bedNumbers = shuffleArray(
-      Array.from({ length: n }, function (_, idx) { return idx + 1; })
-    );
-    list.forEach(function (p, idx) {
-      p.bed = roomLabel + '-' + bedNumbers[idx];
-    });
+    var levels = ['High', 'Medium', 'Low'];
+    var counts = { High: nHigh, Medium: nMedium, Low: nLow };
+    var slotOrder = [];
+    while (slotOrder.length < n) {
+      for (var k = 0; k < 3 && slotOrder.length < n; k++) {
+        if (counts[levels[k]] > 0) {
+          slotOrder.push(levels[k]);
+          counts[levels[k]]--;
+        }
+      }
+    }
 
-    list.sort(function (a, b) {
-      var pa = parseBed(a.bed);
-      var pb = parseBed(b.bed);
-      if (pa.room !== pb.room) return pa.room.localeCompare(pb.room);
-      return pa.num - pb.num;
-    });
+    var idxHigh = 0, idxMid = 0, idxLow = 0;
+    var list = [];
+    for (var s = 0; s < n; s++) {
+      var level = slotOrder[s];
+      var p;
+      if (level === 'High') p = listHigh[idxHigh++];
+      else if (level === 'Medium') p = listMedium[idxMid++];
+      else p = listLow[idxLow++];
+      p.bed = roomLabel + '-' + (s + 1);
+      list.push(p);
+    }
 
     list.forEach(function (p, idx) {
       var num = idx + 1;
