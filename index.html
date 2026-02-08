@@ -99,37 +99,37 @@
         <fieldset class="fieldset">
           <legend>Day-1 生命徵象</legend>
           <div class="form-row">
-            <label for="hr">HR</label>
+            <label for="hr">心跳 (HR)</label>
             <input type="number" id="hr" name="hr" placeholder="30–250" min="0" max="300" step="1">
             <span class="field-unit">bpm</span>
             <span class="error-msg" id="err-hr"></span>
           </div>
           <div class="form-row">
-            <label for="sbp">SBP</label>
+            <label for="sbp">收縮壓 (SBP)</label>
             <input type="number" id="sbp" name="sbp" placeholder="70–250" min="0" max="300" step="1">
             <span class="field-unit">mmHg</span>
             <span class="error-msg" id="err-sbp"></span>
           </div>
           <div class="form-row">
-            <label for="dbp">DBP</label>
+            <label for="dbp">舒張壓 (DBP)</label>
             <input type="number" id="dbp" name="dbp" placeholder="40–150" min="0" max="200" step="1">
             <span class="field-unit">mmHg</span>
             <span class="error-msg" id="err-dbp"></span>
           </div>
           <div class="form-row">
-            <label for="rr">RR</label>
+            <label for="rr">呼吸速率 (RR)</label>
             <input type="number" id="rr" name="rr" placeholder="8–40" min="0" max="60" step="1">
             <span class="field-unit">/min</span>
             <span class="error-msg" id="err-rr"></span>
           </div>
           <div class="form-row">
-            <label for="spo2">SpO<sub>2</sub></label>
+            <label for="spo2">血氧 (SpO<sub>2</sub>)</label>
             <input type="number" id="spo2" name="spo2" placeholder="70–100" min="0" max="100" step="1">
             <span class="field-unit">%</span>
             <span class="error-msg" id="err-spo2"></span>
           </div>
           <div class="form-row">
-            <label for="temp">Temp</label>
+            <label for="temp">體溫 (Temp)</label>
             <input type="number" id="temp" name="temp" placeholder="32–42" min="30" max="45" step="0.1">
             <span class="field-unit">°C</span>
             <span class="error-msg" id="err-temp"></span>
@@ -140,49 +140,49 @@
           <legend>Day-1 檢驗</legend>
           <div class="lab-fields" id="lab-fields">
             <div class="form-row">
-              <label for="wbc">WBC</label>
+              <label for="wbc">白血球 (WBC)</label>
               <input type="number" id="wbc" name="wbc" placeholder="0.5–50" min="0" max="100" step="0.1">
               <span class="field-unit">×10<sup>3</sup>/μL</span>
               <span class="error-msg" id="err-wbc"></span>
             </div>
             <div class="form-row">
-              <label for="hb">Hb</label>
+              <label for="hb">血紅素 (Hb)</label>
               <input type="number" id="hb" name="hb" placeholder="5–20" min="0" max="25" step="0.1">
               <span class="field-unit">g/dL</span>
               <span class="error-msg" id="err-hb"></span>
             </div>
             <div class="form-row">
-              <label for="platelet">Platelet</label>
+              <label for="platelet">血小板 (Platelet)</label>
               <input type="number" id="platelet" name="platelet" placeholder="20–500" min="0" max="1000" step="1">
               <span class="field-unit">×10<sup>3</sup>/μL</span>
               <span class="error-msg" id="err-platelet"></span>
             </div>
             <div class="form-row">
-              <label for="creatinine">Creatinine</label>
+              <label for="creatinine">肌酸酐 (Creatinine)</label>
               <input type="number" id="creatinine" name="creatinine" placeholder="0.3–15" min="0.1" max="30" step="0.1">
               <span class="field-unit">mg/dL</span>
               <span class="error-msg" id="err-creatinine"></span>
             </div>
             <div class="form-row">
-              <label for="bun">BUN</label>
+              <label for="bun">血中尿素氮 (BUN)</label>
               <input type="number" id="bun" name="bun" placeholder="5–120" min="0" max="300" step="1">
               <span class="field-unit">mg/dL</span>
               <span class="error-msg" id="err-bun"></span>
             </div>
             <div class="form-row">
-              <label for="albumin">Albumin</label>
+              <label for="albumin">白蛋白 (Albumin)</label>
               <input type="number" id="albumin" name="albumin" placeholder="2–5" min="0" max="8" step="0.1">
               <span class="field-unit">g/dL</span>
               <span class="error-msg" id="err-albumin"></span>
             </div>
             <div class="form-row">
-              <label for="glucose">Glucose</label>
+              <label for="glucose">血糖 (Glucose)</label>
               <input type="number" id="glucose" name="glucose" placeholder="40–500" min="0" max="1000" step="1">
               <span class="field-unit">mg/dL</span>
               <span class="error-msg" id="err-glucose"></span>
             </div>
             <div class="form-row">
-              <label for="e_GFR">e_GFR</label>
+              <label for="e_GFR">估計腎絲球過濾率 (eGFR)</label>
               <input type="number" id="e_GFR" name="e_GFR" placeholder="15–120" min="5" max="150" step="1">
               <span class="field-unit">mL/min/1.73m²</span>
               <span class="error-msg" id="err-e_-g-f-r"></span>
@@ -198,8 +198,8 @@
 
         <div class="form-actions">
           <button type="button" id="btn-calc" class="btn btn-primary">計算</button>
-          <button type="button" id="btn-reset" class="btn btn-secondary">Reset</button>
-          <span class="demo-label">Demo：</span>
+          <button type="button" id="btn-reset" class="btn btn-secondary">重設</button>
+          <span class="demo-label">範例：</span>
           <button type="button" id="btn-demo-low" class="btn btn-outline">低風險</button>
           <button type="button" id="btn-demo-mid" class="btn btn-outline">中度風險</button>
           <button type="button" id="btn-demo-high" class="btn btn-outline">高風險</button>
@@ -235,7 +235,7 @@
             <h3>建議處置</h3>
             <ul id="display-recommendations" class="recommendation-list"></ul>
           </div>
-          <div class="result-block">
+          <div id="copy-block" class="result-block hidden">
             <h3>可複製文字（貼入紀錄）</h3>
             <div class="copy-row">
               <button type="button" id="btn-copy" class="btn btn-outline">一鍵複製結果</button>

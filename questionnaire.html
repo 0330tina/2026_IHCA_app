@@ -104,7 +104,6 @@
     <div id="questionnaire-thanks" class="questionnaire-thanks hidden">
       <p class="thanks-title">感謝您的填答</p>
       <p class="thanks-text">您的意見將作為系統改善與研究分析之用。</p>
-      <p id="thanks-google-msg" class="thanks-google-msg hidden">您的回覆已存至 Google 試算表。</p>
       <div class="questionnaire-actions">
         <a href="index.html" class="btn btn-primary">回首頁</a>
       </div>
@@ -138,8 +137,6 @@
       function showThanks() {
         form.classList.add('hidden');
         thanks.classList.remove('hidden');
-        var googleMsg = document.getElementById('thanks-google-msg');
-        if (googleMsg) googleMsg.classList.remove('hidden');
       }
 
       form.addEventListener('submit', function (e) {
