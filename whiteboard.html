@@ -22,10 +22,6 @@
     }
     .whiteboard-header small { display: block; font-size: 0.65em; font-weight: 400; opacity: 0.9; margin-top: 0.2rem; color: #3d7a63; }
     .whiteboard-header-btn {
-      position: absolute;
-      top: 50%;
-      right: 1rem;
-      transform: translateY(-50%);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -38,6 +34,7 @@
       border-radius: 10px;
       text-decoration: none;
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      white-space: nowrap;
     }
     .whiteboard-header-btn:hover {
       background: #fff;
@@ -114,17 +111,29 @@
     .whiteboard-card-level { font-size: 0.85rem; font-weight: 600; }
     .whiteboard-card-demo { font-size: 0.7rem; opacity: 0.9; margin-top: 0.35rem; line-height: 1.35; overflow: hidden; text-overflow: ellipsis; }
     .whiteboard-card-bed { font-size: 0.8rem; opacity: 0.9; margin-top: 0.15rem; }
-    .whiteboard-header-actions { position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); display: flex; gap: 0.5rem; align-items: center; }
+    .whiteboard-header-actions {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
     .whiteboard-btn-refresh {
-      padding: 0.35rem 0.75rem;
-      font-size: 0.85rem;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.9rem;
       font-weight: 600;
       color: #2d6a4f;
       background: rgba(255,255,255,0.95);
       border: 2px solid rgba(45, 106, 79, 0.4);
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     .whiteboard-btn-refresh:hover { background: #fff; border-color: #2d6a4f; }
     .whiteboard-footer {
