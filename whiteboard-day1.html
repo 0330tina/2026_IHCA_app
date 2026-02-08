@@ -43,29 +43,46 @@
     .whiteboard-summary {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0.35rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem 1rem;
-      font-size: 0.8rem;
-      font-weight: 600;
+      padding: 0.6rem 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .whiteboard-summary { grid-template-columns: 1fr; padding: 0.5rem 0.75rem; gap: 0.5rem; }
     }
     .whiteboard-summary-card {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 8px;
-      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 12px;
+      padding: 0.6rem 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 2px solid rgba(255,255,255,0.8);
     }
-    .whiteboard-summary-card.level-low   { background: #d4edda; color: #2d6a4f; }
-    .whiteboard-summary-card.level-mid   { background: #fff4d6; color: #8b6914; }
-    .whiteboard-summary-card.level-high  { background: #ffd6e0; color: #9d4b5a; }
-    .whiteboard-summary-label { font-size: inherit; margin: 0; }
-    .whiteboard-summary-count { font-size: inherit; margin: 0; }
-    .whiteboard-summary-pct   { font-size: inherit; margin: 0; opacity: 0.95; }
+    @media (max-width: 600px) {
+      .whiteboard-summary-card {
+        padding: 0.6rem 0.75rem;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0 0.5rem;
+        text-align: left;
+        min-height: 44px;
+      }
+    }
+    .whiteboard-summary-card.level-low   { background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%); color: #2d6a4f; }
+    .whiteboard-summary-card.level-mid   { background: linear-gradient(160deg, #fff4d6 0%, #ffe4b8 100%); color: #8b6914; }
+    .whiteboard-summary-card.level-high  { background: linear-gradient(160deg, #ffd6e0 0%, #ffc9d4 100%); color: #9d4b5a; }
+    .whiteboard-summary-label { font-size: 0.9rem; margin-bottom: 0.15rem; }
+    .whiteboard-summary-count { font-size: 1.4rem; letter-spacing: 0.02em; }
+    .whiteboard-summary-pct  { font-size: 1rem; opacity: 0.95; margin-top: 0.1rem; }
+    @media (max-width: 600px) {
+      .whiteboard-summary-label { margin-bottom: 0; font-size: 0.8rem; }
+      .whiteboard-summary-count { font-size: 1rem; }
+      .whiteboard-summary-pct  { font-size: 0.85rem; margin-top: 0; }
+    }
     .whiteboard-main {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -106,21 +123,21 @@
     <small>電子白板示範 — 15 位病人 · Day-1 生命徵象與檢驗</small>
   </header>
 
-  <section class="whiteboard-summary" id="whiteboard-summary" aria-label="病房風險比例">
+  <section class="whiteboard-summary" id="whiteboard-summary" aria-label="病房風險分布">
     <div class="whiteboard-summary-card level-low">
-      <span class="whiteboard-summary-label">低</span>
-      <span class="whiteboard-summary-count" id="summary-low-count">0</span><span>人</span>
-      <span class="whiteboard-summary-pct" id="summary-low-pct">0%</span>
+      <div class="whiteboard-summary-label">低風險</div>
+      <div class="whiteboard-summary-count" id="summary-low-count">0 人</div>
+      <div class="whiteboard-summary-pct" id="summary-low-pct">0 %</div>
     </div>
     <div class="whiteboard-summary-card level-mid">
-      <span class="whiteboard-summary-label">中</span>
-      <span class="whiteboard-summary-count" id="summary-mid-count">0</span><span>人</span>
-      <span class="whiteboard-summary-pct" id="summary-mid-pct">0%</span>
+      <div class="whiteboard-summary-label">中度風險</div>
+      <div class="whiteboard-summary-count" id="summary-mid-count">0 人</div>
+      <div class="whiteboard-summary-pct" id="summary-mid-pct">0 %</div>
     </div>
     <div class="whiteboard-summary-card level-high">
-      <span class="whiteboard-summary-label">高</span>
-      <span class="whiteboard-summary-count" id="summary-high-count">0</span><span>人</span>
-      <span class="whiteboard-summary-pct" id="summary-high-pct">0%</span>
+      <div class="whiteboard-summary-label">高風險</div>
+      <div class="whiteboard-summary-count" id="summary-high-count">0 人</div>
+      <div class="whiteboard-summary-pct" id="summary-high-pct">0 %</div>
     </div>
   </section>
 
@@ -224,12 +241,12 @@
         container.appendChild(card);
       }
       var total = PATIENTS.length;
-      document.getElementById('summary-low-count').textContent = countLow;
-      document.getElementById('summary-low-pct').textContent = (total ? (countLow / total * 100).toFixed(1) : '0') + '%';
-      document.getElementById('summary-mid-count').textContent = countMid;
-      document.getElementById('summary-mid-pct').textContent = (total ? (countMid / total * 100).toFixed(1) : '0') + '%';
-      document.getElementById('summary-high-count').textContent = countHigh;
-      document.getElementById('summary-high-pct').textContent = (total ? (countHigh / total * 100).toFixed(1) : '0') + '%';
+      document.getElementById('summary-low-count').textContent = countLow + ' 人';
+      document.getElementById('summary-low-pct').textContent = (total ? (countLow / total * 100).toFixed(1) : '0') + ' %';
+      document.getElementById('summary-mid-count').textContent = countMid + ' 人';
+      document.getElementById('summary-mid-pct').textContent = (total ? (countMid / total * 100).toFixed(1) : '0') + ' %';
+      document.getElementById('summary-high-count').textContent = countHigh + ' 人';
+      document.getElementById('summary-high-pct').textContent = (total ? (countHigh / total * 100).toFixed(1) : '0') + ' %';
     })();
   </script>
 </body>
