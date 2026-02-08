@@ -20,6 +20,7 @@
       box-shadow: 0 2px 12px rgba(45, 106, 79, 0.15);
       position: relative;
     }
+    .whiteboard-header-title { display: block; }
     .whiteboard-header small { display: block; font-size: 0.65em; font-weight: 400; opacity: 0.9; margin-top: 0.2rem; color: #3d7a63; }
     @media (max-width: 600px) {
       .whiteboard-header {
@@ -32,15 +33,27 @@
         gap: 0.5rem;
         text-align: center;
       }
+      .whiteboard-header-title {
+        order: 0;
+        line-height: 1.4;
+        margin: 0;
+        padding: 0 0.5rem;
+        font-size: 1rem;
+        word-break: keep-all;
+      }
       .whiteboard-header-actions {
         position: static;
         transform: none;
         order: 1;
         margin-top: 0.25rem;
       }
-      .whiteboard-header .whiteboard-header-actions + small,
-      .whiteboard-header small { order: 2; }
-      .whiteboard-header small { font-size: 0.7em; }
+      .whiteboard-header small {
+        order: 2;
+        font-size: 0.7em;
+        margin-top: 0;
+        padding: 0 0.25rem;
+        line-height: 1.35;
+      }
     }
     .whiteboard-header-btn {
       display: inline-flex;
@@ -136,10 +149,11 @@
     }
     @media (max-width: 500px) {
       .whiteboard-card {
-        min-height: 110px;
-        padding: 0.55rem 0.5rem;
+        min-height: 128px;
+        padding: 0.5rem 0.45rem 0.6rem;
         border-radius: 10px;
         justify-content: flex-start;
+        align-items: center;
       }
       .whiteboard-card-num { font-size: 0.7rem; }
       .whiteboard-card-bed { font-size: 0.7rem; }
@@ -147,14 +161,15 @@
       .whiteboard-card-level { font-size: 0.7rem; margin-top: 0.15rem; }
       .whiteboard-card-demo {
         font-size: 0.6rem;
-        margin-top: 0.3rem;
-        line-height: 1.4;
+        margin-top: 0.35rem;
+        padding-bottom: 0.1rem;
+        line-height: 1.45;
         overflow: visible;
         text-overflow: unset;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
+        display: block;
         word-break: break-all;
+        max-height: none;
+        -webkit-line-clamp: unset;
       }
     }
     .whiteboard-card.level-low   { background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%); color: #2d6a4f; }
@@ -214,7 +229,7 @@
       <button type="button" class="whiteboard-btn-refresh" id="btn-refresh" aria-label="重新產生示範資料">重新產生</button>
       <a href="index.html" class="whiteboard-header-btn">回主頁</a>
     </div>
-    IHCA 24 小時前風險電子白板
+    <span class="whiteboard-header-title">IHCA 24 小時前風險電子白板</span>
     <small id="whiteboard-subtitle">電子白板示範 — 依風險分級顯示</small>
   </header>
 

@@ -3,258 +3,137 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0d9488">
+  <meta name="theme-color" content="#FFF7FA">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="format-detection" content="telephone=no">
-  <title>IHCA Day-1 入院首日風險板</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>院內心因性猝死風險預測平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+      background: linear-gradient(160deg, #FFF7FA 0%, #FFEFF6 40%, #FFE6F0 100%);
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      padding-bottom: max(2rem, env(safe-area-inset-bottom));
+    }
+    .home-wrap {
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+    }
+    .home-title {
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      font-weight: 600;
+      color: #4A2C3A;
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+      margin: 0 0 2rem 0;
+    }
+    .home-btn {
+      display: block;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto 1rem;
+      padding: 0.9rem 1.25rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #4A2C3A;
+      text-decoration: none;
+      text-align: center;
+      border-radius: 18px;
+      border: 2px solid;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .home-btn:focus {
+      outline: 3px solid rgba(243, 169, 198, 0.6);
+      outline-offset: 2px;
+    }
+    .home-btn-primary {
+      background: #FFD6E7;
+      border-color: #F3A9C6;
+    }
+    .home-btn-primary:hover {
+      background: #FFC9DE;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(243, 169, 198, 0.35);
+    }
+    .home-btn-secondary-a {
+      background: #F2D9FF;
+      border-color: #D4A8E8;
+    }
+    .home-btn-secondary-a:hover {
+      background: #E8C9FA;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(212, 168, 232, 0.3);
+    }
+    .home-btn-secondary-b {
+      background: #FFE2D1;
+      border-color: #F0C4A0;
+    }
+    .home-btn-secondary-b:hover {
+      background: #FFD9C2;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(240, 196, 160, 0.35);
+    }
+    .home-sub {
+      font-size: 0.9rem;
+      color: #7d6b7a;
+      margin: 2rem 0 0.75rem;
+    }
+    .home-btns-row {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      justify-content: center;
+      align-items: stretch;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .home-btns-row .home-btn {
+      flex: 1 1 140px;
+      max-width: 200px;
+    }
+    @media (max-width: 480px) {
+      .home-btns-row {
+        flex-direction: column;
+        align-items: center;
+      }
+      .home-btns-row .home-btn {
+        max-width: 320px;
+        width: 100%;
+      }
+    }
+    .home-note {
+      font-size: 0.75rem;
+      color: #b5a5b0;
+      margin-top: 1.5rem;
+    }
+  </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <div class="header-title-wrap">
-        <h1>IHCA Day-1 入院首日風險板</h1>
-        <div class="header-links">
-          <a href="whiteboard-day1.html" class="header-formula-link" target="_blank" rel="noopener" title="入院首日示範白板">首日電子白板</a>
-          <a href="whiteboard.html" class="header-formula-link" target="_blank" rel="noopener" title="事件發生前 24 小時示範白板">事件發生前24小時白板</a>
-          <a href="formula_reference.html" class="header-formula-link" target="_blank" rel="noopener" title="邏輯式回歸完整公式對照（供教授／審查參考）">公式對照</a>
-        </div>
-      </div>
-      <p class="subtitle">依入院首日生命徵象與檢驗結果評估院內心跳停止風險</p>
+  <div class="home-wrap">
+    <h1 class="home-title">院內心因性猝死風險預測平台</h1>
+
+    <a href="input.html" class="home-btn home-btn-primary">首日風險預測資料輸入</a>
+
+    <p class="home-sub">示範病房風險電子白板</p>
+    <div class="home-btns-row">
+      <a href="board_day1.html" class="home-btn home-btn-secondary-a">住院首日</a>
+      <a href="board_event24.html" class="home-btn home-btn-secondary-b">事前24小時</a>
     </div>
-  </header>
 
-  <main class="main">
-    <!-- 左側：輸入區 -->
-    <section class="panel input-panel">
-      <h2>病人資料與 Day-1 數據</h2>
-      <p class="panel-desc">風險評估結果：請填寫下方資料後按「計算」取得風險評估結果。</p>
-      <p class="panel-desc panel-desc-note">說明：心跳、呼吸速率會顯示於結果備註，但<strong>未納入本模型之風險計算</strong>（目前公式僅含體溫、血壓、血氧、年齡、性別、病史與檢驗項目）。</p>
-
-      <form id="risk-form" novalidate>
-        <fieldset class="fieldset">
-          <legend>基本資料</legend>
-          <div class="form-row">
-            <label for="age">年齡 <span class="required">*</span></label>
-            <input type="number" id="age" name="age" placeholder="18–120" min="18" max="120" step="1" required>
-            <span class="field-unit">歲</span>
-            <span class="error-msg" id="err-age"></span>
-          </div>
-          <div class="form-row">
-            <label for="gender">性別</label>
-            <select id="gender" name="gender">
-              <option value="">— 請選擇 —</option>
-              <option value="M">男</option>
-              <option value="F">女</option>
-              <option value="O">其他</option>
-            </select>
-            <span class="field-unit">—</span>
-            <span class="error-msg" id="err-gender"></span>
-          </div>
-          <div class="form-row optional-row">
-            <label for="height">身高</label>
-            <input type="number" id="height" name="height" placeholder="100–220" min="50" max="250" step="0.1">
-            <span class="field-unit">cm</span>
-            <span class="error-msg" id="err-height"></span>
-          </div>
-          <div class="form-row optional-row">
-            <label for="weight">體重</label>
-            <input type="number" id="weight" name="weight" placeholder="30–200" min="20" max="300" step="0.1">
-            <span class="field-unit">kg</span>
-            <span class="error-msg" id="err-weight"></span>
-          </div>
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend>病史（供風險模型，選填）</legend>
-          <div class="form-row form-row-radio">
-            <label>肋膜積水</label>
-            <div class="radio-group" role="group" aria-label="肋膜積水">
-              <label class="radio-opt"><input type="radio" name="pleuraleffusion" value="0"> 否</label>
-              <label class="radio-opt"><input type="radio" name="pleuraleffusion" value="1"> 是</label>
-            </div>
-            <span class="field-unit">—</span>
-            <span class="error-msg" id="err-pleuraleffusion"></span>
-          </div>
-          <div class="form-row form-row-radio">
-            <label>心肌梗塞 (MI)</label>
-            <div class="radio-group" role="group" aria-label="心肌梗塞">
-              <label class="radio-opt"><input type="radio" name="MI" value="0"> 否</label>
-              <label class="radio-opt"><input type="radio" name="MI" value="1"> 是</label>
-            </div>
-            <span class="field-unit">—</span>
-            <span class="error-msg" id="err-m-i"></span>
-          </div>
-          <div class="form-row form-row-radio">
-            <label>心衰竭 (HF)</label>
-            <div class="radio-group" role="group" aria-label="心衰竭">
-              <label class="radio-opt"><input type="radio" name="HF" value="0"> 否</label>
-              <label class="radio-opt"><input type="radio" name="HF" value="1"> 是</label>
-            </div>
-            <span class="field-unit">—</span>
-            <span class="error-msg" id="err-h-f"></span>
-          </div>
-        </fieldset>
-
-        <fieldset class="fieldset">
-          <legend>Day-1 生命徵象</legend>
-          <div class="form-row">
-            <label for="hr">心跳 (HR) <span class="field-hint" title="僅供紀錄與顯示，未納入風險公式">※</span></label>
-            <input type="number" id="hr" name="hr" placeholder="30–250" min="0" max="300" step="1">
-            <span class="field-unit">bpm</span>
-            <span class="error-msg" id="err-hr"></span>
-          </div>
-          <div class="form-row">
-            <label for="sbp">收縮壓 (SBP)</label>
-            <input type="number" id="sbp" name="sbp" placeholder="70–250" min="0" max="300" step="1">
-            <span class="field-unit">mmHg</span>
-            <span class="error-msg" id="err-sbp"></span>
-          </div>
-          <div class="form-row">
-            <label for="dbp">舒張壓 (DBP)</label>
-            <input type="number" id="dbp" name="dbp" placeholder="40–150" min="0" max="200" step="1">
-            <span class="field-unit">mmHg</span>
-            <span class="error-msg" id="err-dbp"></span>
-          </div>
-          <div class="form-row">
-            <label for="rr">呼吸速率 (RR) <span class="field-hint" title="僅供紀錄與顯示，未納入風險公式">※</span></label>
-            <input type="number" id="rr" name="rr" placeholder="8–40" min="0" max="60" step="1">
-            <span class="field-unit">/min</span>
-            <span class="error-msg" id="err-rr"></span>
-          </div>
-          <div class="form-row">
-            <label for="spo2">血氧 (SpO<sub>2</sub>)</label>
-            <input type="number" id="spo2" name="spo2" placeholder="70–100" min="0" max="100" step="1">
-            <span class="field-unit">%</span>
-            <span class="error-msg" id="err-spo2"></span>
-          </div>
-          <div class="form-row">
-            <label for="temp">體溫 (Temp)</label>
-            <input type="number" id="temp" name="temp" placeholder="32–42" min="30" max="45" step="0.1">
-            <span class="field-unit">°C</span>
-            <span class="error-msg" id="err-temp"></span>
-          </div>
-        </fieldset>
-
-        <fieldset class="fieldset lab-fieldset lab-visible" id="lab-fieldset">
-          <legend>Day-1 檢驗</legend>
-          <div class="lab-fields" id="lab-fields">
-            <div class="form-row">
-              <label for="wbc">白血球 (WBC)</label>
-              <input type="number" id="wbc" name="wbc" placeholder="0.5–50" min="0" max="100" step="0.1">
-              <span class="field-unit">×10<sup>3</sup>/μL</span>
-              <span class="error-msg" id="err-wbc"></span>
-            </div>
-            <div class="form-row">
-              <label for="hb">血紅素 (Hb)</label>
-              <input type="number" id="hb" name="hb" placeholder="5–20" min="0" max="25" step="0.1">
-              <span class="field-unit">g/dL</span>
-              <span class="error-msg" id="err-hb"></span>
-            </div>
-            <div class="form-row">
-              <label for="platelet">血小板 (Platelet)</label>
-              <input type="number" id="platelet" name="platelet" placeholder="20–500" min="0" max="1000" step="1">
-              <span class="field-unit">×10<sup>3</sup>/μL</span>
-              <span class="error-msg" id="err-platelet"></span>
-            </div>
-            <div class="form-row">
-              <label for="creatinine">肌酸酐 (Creatinine)</label>
-              <input type="number" id="creatinine" name="creatinine" placeholder="0.3–15" min="0.1" max="30" step="0.1">
-              <span class="field-unit">mg/dL</span>
-              <span class="error-msg" id="err-creatinine"></span>
-            </div>
-            <div class="form-row">
-              <label for="bun">血中尿素氮 (BUN)</label>
-              <input type="number" id="bun" name="bun" placeholder="5–120" min="0" max="300" step="1">
-              <span class="field-unit">mg/dL</span>
-              <span class="error-msg" id="err-bun"></span>
-            </div>
-            <div class="form-row">
-              <label for="albumin">白蛋白 (Albumin)</label>
-              <input type="number" id="albumin" name="albumin" placeholder="2–5" min="0" max="8" step="0.1">
-              <span class="field-unit">g/dL</span>
-              <span class="error-msg" id="err-albumin"></span>
-            </div>
-            <div class="form-row">
-              <label for="glucose">血糖 (Glucose)</label>
-              <input type="number" id="glucose" name="glucose" placeholder="40–500" min="0" max="1000" step="1">
-              <span class="field-unit">mg/dL</span>
-              <span class="error-msg" id="err-glucose"></span>
-            </div>
-            <div class="form-row">
-              <label for="e_GFR">估計腎絲球過濾率 (eGFR)</label>
-              <input type="number" id="e_GFR" name="e_GFR" placeholder="15–120" min="5" max="150" step="1">
-              <span class="field-unit">mL/min/1.73m²</span>
-              <span class="error-msg" id="err-e_-g-f-r"></span>
-            </div>
-            <div class="form-row">
-              <label for="potassium">鉀 (K)</label>
-              <input type="number" id="potassium" name="potassium" placeholder="3.5–5.5" min="2" max="8" step="0.1">
-              <span class="field-unit">mEq/L</span>
-              <span class="error-msg" id="err-potassium"></span>
-            </div>
-          </div>
-        </fieldset>
-
-        <div class="form-actions">
-          <button type="button" id="btn-calc" class="btn btn-primary">計算</button>
-          <button type="button" id="btn-reset" class="btn btn-secondary">重設</button>
-          <span class="demo-label">範例：</span>
-          <button type="button" id="btn-demo-low" class="btn btn-outline">低風險</button>
-          <button type="button" id="btn-demo-mid" class="btn btn-outline">中度風險</button>
-          <button type="button" id="btn-demo-high" class="btn btn-outline">高風險</button>
-        </div>
-      </form>
-
-      <!-- 結果區：按「計算」後顯示於此 -->
-      <div id="result-panel" class="result-panel-inline" aria-live="polite">
-        <h2 class="panel-result-title">風險評估結果</h2>
-        <div id="result-placeholder" class="result-placeholder"></div>
-        <div id="result-content" class="result-content hidden">
-          <div class="result-score-row">
-            <div class="result-item">
-              <span class="result-label" id="display-score-label">風險分數</span>
-              <span id="display-score" class="result-value">—</span>
-              <span class="result-unit" id="display-score-unit">分</span>
-            </div>
-            <div class="result-item result-level-wrap">
-              <span class="result-label">風險等級</span>
-              <span id="display-level" class="result-level" aria-hidden="true"></span>
-              <span id="display-level-icon" class="result-level-icon" aria-hidden="true"></span>
-            </div>
-          </div>
-          <div id="missing-fields-block" class="result-block missing-block hidden">
-            <h3>缺少欄位</h3>
-            <p id="missing-fields-list" class="missing-list"></p>
-          </div>
-          <div id="range-warnings-block" class="result-block warnings-block hidden">
-            <h3>超出合理範圍（已納入計算，請確認）</h3>
-            <ul id="range-warnings-list" class="warnings-list"></ul>
-          </div>
-          <div class="result-block">
-            <h3>建議處置</h3>
-            <ul id="display-recommendations" class="recommendation-list"></ul>
-          </div>
-          <div id="copy-block" class="result-block hidden">
-            <h3>可複製文字（貼入紀錄）</h3>
-            <div class="copy-row">
-              <button type="button" id="btn-copy" class="btn btn-outline">一鍵複製結果</button>
-              <span id="copy-feedback" class="copy-feedback" aria-live="polite"></span>
-            </div>
-            <pre id="display-note" class="note-text"></pre>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>本工具僅供臨床參考，不取代醫師判斷。數據請以院內系統為準。</p>
-  </footer>
-
-  <script src="riskCalc.js"></script>
-  <script src="script.js"></script>
+    <p class="home-note">示範介面｜資料僅供展示</p>
+  </div>
 </body>
 </html>
