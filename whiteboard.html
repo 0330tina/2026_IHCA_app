@@ -230,7 +230,7 @@
       <a href="index.html" class="whiteboard-header-btn">回主頁</a>
     </div>
     <span class="whiteboard-header-title">IHCA 24 小時前風險電子白板</span>
-    <small id="whiteboard-subtitle">電子白板示範 — 依風險分級顯示</small>
+    <small id="whiteboard-subtitle">每 5 秒自動更新（模擬不同時間風險變化）</small>
   </header>
 
   <section class="whiteboard-summary" id="whiteboard-summary" aria-label="病房風險分布">
@@ -281,7 +281,7 @@
         document.getElementById('summary-low-pct').textContent = (total ? (low.length / total * 100).toFixed(1) : '0') + ' %';
 
         var subtitle = document.getElementById('whiteboard-subtitle');
-        if (subtitle) subtitle.textContent = '電子白板示範 — ' + total + ' 位病人 · 每 5 秒自動更新（模擬不同時間風險變化）';
+        if (subtitle) subtitle.textContent = '每 5 秒自動更新（模擬不同時間風險變化）';
 
         var main = document.getElementById('whiteboard-main');
         main.innerHTML = '';
