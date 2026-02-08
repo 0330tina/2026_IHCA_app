@@ -191,23 +191,8 @@
       align-items: center;
       flex-wrap: nowrap;
     }
-    .whiteboard-btn-refresh {
-      padding: 0.4rem 0.9rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #2d6a4f;
-      background: rgba(255,255,255,0.95);
-      border: 2px solid rgba(45, 106, 79, 0.4);
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      white-space: nowrap;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
-    .whiteboard-btn-refresh:hover { background: #fff; border-color: #2d6a4f; }
     @media (max-width: 600px) {
-      .whiteboard-header-btn,
-      .whiteboard-btn-refresh {
+      .whiteboard-header-btn {
         min-height: 44px;
         padding: 0.5rem 0.75rem;
         font-size: 0.85rem;
@@ -226,7 +211,6 @@
 <body class="whiteboard-page">
   <header class="whiteboard-header">
     <div class="whiteboard-header-actions">
-      <button type="button" class="whiteboard-btn-refresh" id="btn-refresh" aria-label="重新產生示範資料">重新產生</button>
       <a href="index.html" class="whiteboard-header-btn">回主頁</a>
     </div>
     <span class="whiteboard-header-title">IHCA 24 小時前風險電子白板</span>
@@ -311,7 +295,6 @@
       }
 
       run();
-      document.getElementById('btn-refresh').addEventListener('click', run);
       setInterval(run, 5000);
     })();
   </script>
