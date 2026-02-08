@@ -3,189 +3,264 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#FFF7FA">
+  <meta name="theme-color" content="#F0F7FF">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="format-detection" content="telephone=no">
   <title>院內心因性猝死風險預測平台</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
       font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
-      background: linear-gradient(160deg, #FFF7FA 0%, #FFEFF6 40%, #FFE6F0 100%);
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1.5rem;
-      padding-bottom: max(2rem, env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, #F8FAFC 0%, #F0F7FF 50%, #E8F2FC 100%);
+      color: #334155;
+      padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1rem, 4vw, 1.5rem);
+      padding-bottom: max(clamp(1.5rem, 5vw, 2.5rem), env(safe-area-inset-bottom));
     }
     .home-wrap {
-      max-width: 480px;
-      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* 主標題區 */
+    .home-hero {
       text-align: center;
+      margin-bottom: clamp(1.5rem, 5vw, 2.5rem);
     }
     .home-hero-icon {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto 1rem;
-      color: #6B4E5C;
-      opacity: 0.9;
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 0.75rem;
+      color: #4A6FA5;
     }
     .home-title {
-      font-size: clamp(1.35rem, 4vw, 1.75rem);
-      font-weight: 600;
-      color: #4A2C3A;
+      font-size: clamp(1.25rem, 3.8vw, 1.65rem);
+      font-weight: 700;
+      color: #1E3A5F;
       letter-spacing: 0.02em;
-      line-height: 1.4;
-      margin: 0 0 2rem 0;
+      line-height: 1.35;
+      margin: 0 0 0.35rem 0;
+    }
+    .home-hero-desc {
+      font-size: 0.8rem;
+      color: #64748B;
+      font-weight: 500;
+    }
+
+    /* 區塊卡片 */
+    .home-section {
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 16px;
+      padding: clamp(1rem, 4vw, 1.35rem);
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      box-shadow: 0 2px 12px rgba(30, 58, 95, 0.06);
+    }
+    .home-section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 0.5rem;
+    }
+    .home-section-title .icon {
+      width: 22px;
+      height: 22px;
+      color: #4A6FA5;
+      flex-shrink: 0;
+    }
+    .home-section-desc {
+      font-size: 0.8rem;
+      color: #64748B;
+      line-height: 1.5;
+      margin-bottom: 1rem;
     }
     .home-btn {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
+      width: 100%;
+      padding: 0.85rem 1.2rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1E3A5F;
+      text-decoration: none;
+      text-align: center;
+      border-radius: 12px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      min-height: 48px;
     }
     .home-btn .home-btn-icon {
       width: 20px;
       height: 20px;
       flex-shrink: 0;
       color: currentColor;
-      opacity: 0.85;
-    }
-    .home-btn {
-      width: 100%;
-      max-width: 320px;
-      margin: 0 auto 1rem;
-      padding: 0.9rem 1.25rem;
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #4A2C3A;
-      text-decoration: none;
-      text-align: center;
-      border-radius: 18px;
-      border: 2px solid;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+      opacity: 0.9;
     }
     .home-btn:focus {
-      outline: 3px solid rgba(243, 169, 198, 0.6);
+      outline: 3px solid rgba(74, 111, 165, 0.4);
       outline-offset: 2px;
     }
     .home-btn-primary {
-      background: #FFD6E7;
-      border-color: #F3A9C6;
+      background: linear-gradient(135deg, #B8D4E8 0%, #A8C8E0 100%);
+      border-color: #8BAED4;
+      color: #1E3A5F;
     }
     .home-btn-primary:hover {
-      background: #FFC9DE;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(243, 169, 198, 0.35);
-    }
-    .home-btn-secondary-a {
-      background: #F2D9FF;
-      border-color: #D4A8E8;
-    }
-    .home-btn-secondary-a:hover {
-      background: #E8C9FA;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(212, 168, 232, 0.3);
-    }
-    .home-btn-secondary-b {
-      background: #FFE2D1;
-      border-color: #F0C4A0;
-    }
-    .home-btn-secondary-b:hover {
-      background: #FFD9C2;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(240, 196, 160, 0.35);
-    }
-    .home-sub {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      font-size: 0.9rem;
-      color: #7d6b7a;
-      margin: 2rem 0 0.75rem;
-    }
-    .home-sub-icon {
-      width: 18px;
-      height: 18px;
-      color: #9B8A97;
+      background: linear-gradient(135deg, #A8C8E0 0%, #98BCDA 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(74, 111, 165, 0.25);
     }
     .home-btns-row {
       display: flex;
       flex-direction: row;
-      gap: 1rem;
-      justify-content: center;
+      gap: 0.75rem;
       align-items: stretch;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
     }
     .home-btns-row .home-btn {
-      flex: 1 1 140px;
-      max-width: 200px;
+      flex: 1;
+      min-width: 0;
     }
-    @media (max-width: 480px) {
+    @media (max-width: 420px) {
       .home-btns-row {
         flex-direction: column;
-        align-items: center;
-      }
-      .home-btns-row .home-btn {
-        max-width: 320px;
-        width: 100%;
       }
     }
+
+    /* 24h 流程指示 */
+    .home-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      color: #64748B;
+      font-size: 0.8rem;
+    }
+    .home-flow-line {
+      flex: 1;
+      max-width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #94A3B8, transparent);
+      border-radius: 1px;
+    }
+    .home-flow-icon {
+      width: 20px;
+      height: 20px;
+      color: #64748B;
+    }
+    .home-flow-text { font-weight: 500; }
+
+    /* 白板區塊 */
+    .home-section-whiteboard .home-section-desc {
+      margin-bottom: 0.85rem;
+    }
+
+    .home-btn-board-a {
+      background: linear-gradient(135deg, #E8E0F5 0%, #DDD4EE 100%);
+      border-color: #C4B8E0;
+      color: #3D3557;
+    }
+    .home-btn-board-a:hover {
+      background: linear-gradient(135deg, #DDD4EE 0%, #D2C8E8 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(125, 53, 87, 0.15);
+    }
+    .home-btn-board-b {
+      background: linear-gradient(135deg, #E0EDF5 0%, #D4E6F0 100%);
+      border-color: #B8D4E4;
+      color: #2C4A5F;
+    }
+    .home-btn-board-b:hover {
+      background: linear-gradient(135deg, #D4E6F0 0%, #C8DEEA 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(44, 74, 95, 0.2);
+    }
+
     .home-note {
+      text-align: center;
       font-size: 0.75rem;
-      color: #b5a5b0;
-      margin-top: 1.5rem;
+      color: #94A3B8;
+      margin-top: 1.25rem;
     }
   </style>
 </head>
 <body>
   <div class="home-wrap">
-    <!-- 心臟＋心律意象：院內心因性猝死風險之醫學 icon -->
-    <svg class="home-hero-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M24 40C12 30 4 22 4 15c0-5 4-8 9-8 3.5 0 7.5 3 10 6 2.5-3 6.5-6 10-6 5 0 9 3 9 8 0 7-8 15-20 25z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
-      <path d="M10 34h3l2.5-5 2.5 6 3-9 3 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-    </svg>
-    <h1 class="home-title">院內心因性猝死風險預測平台</h1>
-
-    <a href="input.html" class="home-btn home-btn-primary">
-      <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+    <header class="home-hero">
+      <svg class="home-hero-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M24 40C12 30 4 22 4 15c0-5 4-8 9-8 3.5 0 7.5 3 10 6 2.5-3 6.5-6 10-6 5 0 9 3 9 8 0 7-8 15-20 25z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" fill="none"/>
+        <path d="M10 34h3l2.5-5 2.5 6 3-9 3 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       </svg>
-      首日風險預測資料輸入
-    </a>
+      <h1 class="home-title">院內心因性猝死風險預測平台</h1>
+      <p class="home-hero-desc">功能與流程概覽</p>
+    </header>
 
-    <p class="home-sub">
-      <svg class="home-sub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+    <!-- 資料輸入與預測機制 -->
+    <section class="home-section" aria-labelledby="section-input-title">
+      <h2 id="section-input-title" class="home-section-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+        </svg>
+        資料輸入與預測機制
+      </h2>
+      <p class="home-section-desc">住院首日風險評估：於病患住院第一天輸入關鍵生理數據，取得風險預測結果。</p>
+      <a href="input.html" class="home-btn home-btn-primary">
+        <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+        </svg>
+        首日風險預測資料輸入
+      </a>
+    </section>
+
+    <!-- 24h 流程 -->
+    <div class="home-flow" aria-hidden="true">
+      <span class="home-flow-line"></span>
+      <svg class="home-flow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
       </svg>
-      示範病房風險電子白板
-    </p>
-    <div class="home-btns-row">
-      <a href="whiteboard-day1.html" class="home-btn home-btn-secondary-a">
-        <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
-        </svg>
-        住院首日
-      </a>
-      <a href="whiteboard.html" class="home-btn home-btn-secondary-b">
-        <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-        </svg>
-        事前24小時
-      </a>
+      <span class="home-flow-text">24h</span>
+      <span class="home-flow-line"></span>
     </div>
+    <p class="home-section-desc" style="text-align:center; margin:0 0 1rem 0; padding:0 0.5rem;">事前 24 小時風險預警：系統可於風險事件發生前產出預測報告。</p>
+
+    <!-- 臨床監控介面應用 -->
+    <section class="home-section home-section-whiteboard" aria-labelledby="section-board-title">
+      <h2 id="section-board-title" class="home-section-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        臨床監控介面應用
+      </h2>
+      <p class="home-section-desc">示範病房風險電子白板：提供醫療人員在病房端隨時掌握高風險病患動態。</p>
+      <div class="home-btns-row">
+        <a href="whiteboard-day1.html" class="home-btn home-btn-board-a">
+          <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+          </svg>
+          住院首日
+        </a>
+        <a href="whiteboard.html" class="home-btn home-btn-board-b">
+          <svg class="home-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+          </svg>
+          事前24小時
+        </a>
+      </div>
+    </section>
 
     <p class="home-note">示範介面｜資料僅供展示</p>
   </div>
