@@ -178,6 +178,17 @@ body {
   color: var(--text-muted);
   line-height: 1.45;
 }
+.panel-desc-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: -0.35rem;
+}
+.field-hint {
+  font-weight: 400;
+  color: var(--text-muted);
+  cursor: help;
+  font-size: 0.85em;
+}
 
 /* ----- Form ----- */
 .fieldset {

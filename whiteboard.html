@@ -21,6 +21,27 @@
       position: relative;
     }
     .whiteboard-header small { display: block; font-size: 0.65em; font-weight: 400; opacity: 0.9; margin-top: 0.2rem; color: #3d7a63; }
+    @media (max-width: 600px) {
+      .whiteboard-header {
+        padding: 0.75rem 0.75rem 1rem;
+        padding-right: 0.75rem;
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: center;
+      }
+      .whiteboard-header-actions {
+        position: static;
+        transform: none;
+        order: 1;
+        margin-top: 0.25rem;
+      }
+      .whiteboard-header .whiteboard-header-actions + small,
+      .whiteboard-header small { order: 2; }
+      .whiteboard-header small { font-size: 0.7em; }
+    }
     .whiteboard-header-btn {
       display: inline-flex;
       align-items: center;
@@ -51,7 +72,7 @@
       text-align: center;
     }
     @media (max-width: 600px) {
-      .whiteboard-summary { grid-template-columns: 1fr; padding: 0.5rem 0.75rem; gap: 0.4rem; }
+      .whiteboard-summary { grid-template-columns: 1fr; padding: 0.5rem 0.75rem; gap: 0.5rem; }
     }
     .whiteboard-summary-card {
       border-radius: 12px;
@@ -61,7 +82,17 @@
       border: 2px solid rgba(255,255,255,0.8);
     }
     @media (max-width: 600px) {
-      .whiteboard-summary-card { padding: 0.45rem 0.65rem; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0 0.5rem; text-align: left; }
+      .whiteboard-summary-card {
+        padding: 0.6rem 0.75rem;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 0 0.5rem;
+        text-align: left;
+        min-height: 44px;
+      }
     }
     .whiteboard-summary-card.level-low   { background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%); color: #2d6a4f; }
     .whiteboard-summary-card.level-mid   { background: linear-gradient(160deg, #fff4d6 0%, #ffe4b8 100%); color: #8b6914; }
@@ -84,7 +115,14 @@
       align-items: stretch;
     }
     @media (max-width: 900px)  { .whiteboard-main { grid-template-columns: repeat(3, 1fr); gap: 0.6rem; } }
-    @media (max-width: 500px)  { .whiteboard-main { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; padding: 0 0.75rem 0.75rem; } }
+    @media (max-width: 500px)  {
+      .whiteboard-main {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        padding: 0 0.6rem 1rem;
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+      }
+    }
     .whiteboard-card {
       border-radius: 12px;
       padding: 0.7rem;
@@ -97,11 +135,27 @@
       border: 2px solid rgba(255,255,255,0.8);
     }
     @media (max-width: 500px) {
-      .whiteboard-card { min-height: 100px; padding: 0.5rem; border-radius: 10px; }
-      .whiteboard-card-prob { font-size: 1.1rem; }
-      .whiteboard-card-level { font-size: 0.75rem; }
-      .whiteboard-card-demo { font-size: 0.65rem; margin-top: 0.25rem; }
-      .whiteboard-card-bed { font-size: 0.75rem; }
+      .whiteboard-card {
+        min-height: 110px;
+        padding: 0.55rem 0.5rem;
+        border-radius: 10px;
+        justify-content: flex-start;
+      }
+      .whiteboard-card-num { font-size: 0.7rem; }
+      .whiteboard-card-bed { font-size: 0.7rem; }
+      .whiteboard-card-prob { font-size: 1rem; }
+      .whiteboard-card-level { font-size: 0.7rem; margin-top: 0.15rem; }
+      .whiteboard-card-demo {
+        font-size: 0.6rem;
+        margin-top: 0.3rem;
+        line-height: 1.4;
+        overflow: visible;
+        text-overflow: unset;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        word-break: break-all;
+      }
     }
     .whiteboard-card.level-low   { background: linear-gradient(160deg, #d4edda 0%, #c5e8d0 100%); color: #2d6a4f; }
     .whiteboard-card.level-mid   { background: linear-gradient(160deg, #fff4d6 0%, #ffe4b8 100%); color: #8b6914; }
@@ -136,6 +190,14 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
     .whiteboard-btn-refresh:hover { background: #fff; border-color: #2d6a4f; }
+    @media (max-width: 600px) {
+      .whiteboard-header-btn,
+      .whiteboard-btn-refresh {
+        min-height: 44px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+      }
+    }
     .whiteboard-footer {
       text-align: center;
       padding: 0.5rem 1rem;
